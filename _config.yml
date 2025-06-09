@@ -2,30 +2,19 @@
 title: Leo Cai
 description: Software Engineer @ AWS Redshift
 author: Leo Cai
-url: "https://leocai.me"
+url: "http://leocai.me"  # 暂时使用 http
 
-# Theme settings (using the minimal theme for clean look)
-theme: minimal
-
-# Blog settings
+# Build settings
+markdown: kramdown
 permalink: /blog/:year/:month/:day/:title/
 
-# Navigation links
-header_pages:
-  - about.md
-  - blog.md
+# Theme settings
+theme: minima  # 使用最简单的主题
 
-# Markdown processor settings
-markdown: kramdown
-kramdown:
-  input: GFM
-  syntax_highlighter: rouge
-
-# Files to exclude from processing
+# Exclude files from processing
 exclude:
   - README.md
+  - .gitignore
   - Gemfile
   - Gemfile.lock
-  - node_modules
-  - vendor
 
