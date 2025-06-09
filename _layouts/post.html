@@ -21,7 +21,7 @@ layout: default
             <div class="terminal-button terminal-close"></div>
             <div class="terminal-button terminal-minimize"></div>
             <div class="terminal-button terminal-maximize"></div>
-            <div class="terminal-title">leo@redshift: ~/blog/{{ page.title | slugify }}</div>
+            <div class="terminal-title">leo@redshift: ~/blog/posts</div>
             <!-- Terminal Tabs -->
             <div class="terminal-tabs">
                 <a href="/" class="terminal-tab">Home</a>
@@ -32,15 +32,43 @@ layout: default
         <div class="terminal-body">
             <div class="terminal-line">
                 <span class="terminal-prompt">leo@redshift</span>
-                <span class="terminal-command">cat {{ page.title | slugify }}.md</span>
+                <span class="terminal-command">cat posts/{{ page.date | date: "%Y-%m-%d" }}-{{ page.title | slugify }}.md</span>
             </div>
+            
+            <!-- File info line -->
+            <div class="file-info-line">
+                <span class="file-info-item">File: posts/{{ page.date | date: "%Y-%m-%d" }}-{{ page.title | slugify }}.md</span>
+                <span class="file-info-item">Created: {{ page.date | date: "%Y-%m-%d %H:%M" }}</span>
+                <span class="file-info-item">Author: Leo Cai</span>
+            </div>
+            
+            <!-- File content with line numbers -->
             <div class="terminal-output blog-post-content">
-                <h1>{{ page.title }}</h1>
-                <div class="post-meta">
-                    <span class="post-date">{{ page.date | date: "%Y-%m-%d" }}</span>
+                <div class="file-content">
+                    <!-- Post metadata in YAML format -->
+                    <div class="file-yaml-header">
+                        <div class="line-number">1</div><span class="yaml-delimiter">---</span>
+                        <div class="line-number">2</div><span class="yaml-key">layout:</span> <span class="yaml-value">post</span>
+                        <div class="line-number">3</div><span class="yaml-key">title:</span> <span class="yaml-value">"{{ page.title }}"</span>
+                        <div class="line-number">4</div><span class="yaml-key">date:</span> <span class="yaml-value">{{ page.date | date: "%Y-%m-%d" }}</span>
+                        {% if page.tags %}<div class="line-number">5</div><span class="yaml-key">tags:</span> <span class="yaml-value">[{% for tag in page.tags %}{{ tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}]</span>{% endif %}
+                        <div class="line-number">{% if page.tags %}6{% else %}5{% endif %}</div><span class="yaml-delimiter">---</span>
+                    </div>
+                    
+                    <!-- Post content with line numbers -->
+                    <div class="file-markdown-content">
+                        {% assign line_count = content | split: "
+" %}
+                        {% assign start_line = page.tags and 7 or 6 %}
+                        {{ content | replace: '<h1', '<div class="line-number">' | append: start_line | append: '</div><h1' | replace: '<h2', '<div class="line-number">' | append: start_line | plus: 1 | append: '</div><h2' | replace: '<p', '<div class="line-number">' | append: start_line | plus: 2 | append: '</div><p' }}
+                    </div>
                 </div>
                 
-                {{ content }}
+                <!-- Command prompt after file content -->
+                <div class="terminal-line" style="margin-top: 20px;">
+                    <span class="terminal-prompt">leo@redshift</span>
+                    <span class="terminal-command">cd ..</span>
+                </div>
                 
                 <div class="post-navigation">
                     <a href="/blog" class="back-link"><i class="fas fa-arrow-left"></i> Back to all posts</a>
