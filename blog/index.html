@@ -1,6 +1,3 @@
----
-layout: default
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,38 +12,319 @@ layout: default
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" href="../icon.webp" type="image/webp">
     <style>
-        /* Inline styles to ensure proper table formatting */
-        .ascii-table {
-            font-family: 'Fira Code', monospace;
-            line-height: 1.2;
-            white-space: pre;
-            margin: 0;
-            color: #5c6370; /* Terminal comment color */
-            font-size: 14px; /* Control font size */
+        :root {
+            --terminal-bg: #282c34;
+            --terminal-text: #abb2bf;
+            --terminal-green: #98c379;
+            --terminal-blue: #61afef;
+            --terminal-yellow: #e5c07b;
+            --terminal-red: #e06c75;
+            --terminal-purple: #c678dd;
+            --terminal-cyan: #56b6c2;
+            --terminal-prompt: #98c379;
+            --terminal-cursor: #61afef;
+            --terminal-selection: rgba(97, 175, 239, 0.3);
+            --terminal-comment: #5c6370;
+            --terminal-font: 'Fira Code', monospace;
         }
         
-        .ascii-table a.post-link {
-            color: #61afef; /* Terminal blue */
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: var(--terminal-bg);
+            color: var(--terminal-text);
+            font-family: var(--terminal-font);
+            line-height: 1.2;
+        }
+        
+        /* Terminal Window */
+        .terminal-window {
+            background-color: var(--terminal-bg);
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .terminal-header {
+            background: #21252b;
+            height: 30px;
+            padding: 0 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .terminal-close {
+            background-color: #ff5f56;
+        }
+        
+        .terminal-minimize {
+            background-color: #ffbd2e;
+        }
+        
+        .terminal-maximize {
+            background-color: #27c93f;
+        }
+        
+        .terminal-title {
+            color: var(--terminal-comment);
+            font-size: 12px;
+            margin-left: 15px;
+            margin-right: 20px;
+        }
+        
+        .terminal-tabs {
+            display: flex;
+            margin-left: 20px;
+        }
+        
+        .terminal-tab {
+            color: var(--terminal-comment);
+            text-decoration: none;
+            padding: 0 15px;
+            font-size: 14px;
+            line-height: 30px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .terminal-tab:hover {
+            color: var(--terminal-text);
+        }
+        
+        .terminal-tab.active {
+            color: var(--terminal-blue);
+            border-bottom-color: var(--terminal-blue);
+        }
+        
+        .terminal-body {
+            padding: 20px;
+            flex: 1;
+            height: auto;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .terminal-line {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .terminal-prompt {
+            color: var(--terminal-prompt);
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+        
+        .terminal-prompt::before {
+            content: "➜";
+            margin-right: 8px;
+        }
+        
+        .terminal-command {
+            color: var(--terminal-text);
+            font-weight: 500;
+        }
+        
+        .terminal-output {
+            width: 100%;
+            padding: 10px 0 20px 25px;
+            white-space: pre-wrap;
+        }
+        
+        /* ASCII Table Style */
+        .ascii-table {
+            font-family: var(--terminal-font);
+            white-space: pre;
+            color: var(--terminal-comment);
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .ascii-table-row {
+            display: flex;
+            width: 100%;
+            padding: 3px 0;
+        }
+        
+        .ascii-table-header {
+            color: var(--terminal-yellow);
+            font-weight: bold;
+        }
+        
+        .ascii-table-cell {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .cell-date {
+            width: 110px;
+            flex-shrink: 0;
+        }
+        
+        .cell-id {
+            width: 50px;
+            flex-shrink: 0;
+        }
+        
+        .cell-title {
+            flex-grow: 1;
+            padding-right: 10px;
+        }
+        
+        .cell-tags {
+            width: 120px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+        
+        .post-link {
+            color: var(--terminal-blue);
             text-decoration: none;
             transition: color 0.3s ease;
-            font-size: 14px; /* Match font size */
         }
         
-        .ascii-table a.post-link:hover {
-            color: #56b6c2; /* Terminal cyan */
+        .post-link:hover {
+            color: var(--terminal-cyan);
             text-decoration: underline;
         }
         
-        /* Fix for table alignment */
-        .post-row {
+        .post-tag {
             display: inline-block;
+            background-color: rgba(97, 175, 239, 0.1);
+            color: var(--terminal-cyan);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
+        
+        /* Stats section */
+        .stats-section {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 3px;
+        }
+        
+        .stats-content {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .stats-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .stats-label {
+            color: var(--terminal-purple);
+            margin-right: 8px;
+        }
+        
+        .stats-value {
+            color: var(--terminal-text);
+            font-weight: bold;
+        }
+        
+        /* Footer */
+        .terminal-footer {
+            background-color: var(--terminal-bg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            text-align: center;
+            color: var(--terminal-comment);
+            font-size: 0.9rem;
+        }
+        
+        /* Blog post content */
+        .blog-post-content {
+            display: none;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+        }
+        
+        .blog-post-content h1 {
+            color: var(--terminal-yellow);
+            margin-top: 0;
+        }
+        
+        .blog-post-content h2, 
+        .blog-post-content h3 {
+            color: var(--terminal-blue);
+        }
+        
+        .blog-post-content pre {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .blog-post-content code {
+            font-family: var(--terminal-font);
+            color: var(--terminal-green);
+        }
+        
+        .blog-post-header {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--terminal-comment);
+        }
+        
+        .blog-post-meta {
+            color: var(--terminal-comment);
+            font-size: 0.9rem;
+        }
+        
+        .back-to-list {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--terminal-blue);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .back-to-list:hover {
+            text-decoration: underline;
+        }
+        
+        /* Matrix Effect (Optional) */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.05;
         }
     </style>
 </head>
 <body>
-    <!-- Terminal Window - Now fills the entire page -->
-    <div class="terminal-window fullscreen">
+    <!-- Terminal Window -->
+    <div class="terminal-window">
         <div class="terminal-header">
             <div class="terminal-button terminal-close"></div>
             <div class="terminal-button terminal-minimize"></div>
@@ -60,46 +338,79 @@ layout: default
         </div>
         <div class="terminal-body">
             <div id="terminal-output">
-                <div class="terminal-line">
-                    <span class="terminal-prompt">leo@redshift</span>
-                    <span class="terminal-command">ls -la --format=table posts/</span>
-                </div>
-                
-                <div class="terminal-output">
-                    <!-- ASCII art table with fixed formatting -->
-                    <div class="ascii-table">
-                        <pre>┌────────────┬──────┬─────────────────────────────┬───────────────┐
-│    DATE    │  ID  │           TITLE             │     TAGS      │
-├────────────┼──────┼─────────────────────────────┼───────────────┤</pre>
-                        {% for post in site.posts %}
-                        <pre class="post-row">│ {{ post.date | date: "%Y-%m-%d" }} │ #{{ forloop.index | prepend: '   ' | slice: -3, 3 }} │ <a href="{{ post.url }}" class="post-link">{{ post.title | truncate: 25 | ljust: 25 }}</a> │ {% if post.tags %}{% for tag in post.tags limit:2 %}{{ tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% if post.tags.size > 2 %}...{% endif %}{% else %}general{% endif %} │</pre>
-                        {% endfor %}
-                        <pre>└────────────┴──────┴─────────────────────────────┴───────────────┘</pre>
+                <!-- Blog post listing view -->
+                <div id="blog-list-view">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">leo@redshift</span>
+                        <span class="terminal-command">ls -la posts/</span>
+                    </div>
+                    
+                    <div class="terminal-output">
+                        <!-- ASCII art table with fixed formatting -->
+                        <div class="ascii-table">
+                            <div class="ascii-table-row ascii-table-header">
+                                <div class="ascii-table-cell cell-date">DATE</div>
+                                <div class="ascii-table-cell cell-id">ID</div>
+                                <div class="ascii-table-cell cell-title">TITLE</div>
+                                <div class="ascii-table-cell cell-tags">TAGS</div>
+                            </div>
+                            
+                            <!-- Blog posts will be dynamically inserted here -->
+                            <div id="blog-posts-container"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats section -->
+                    <div class="terminal-line" style="margin-top: 20px;">
+                        <span class="terminal-prompt">leo@redshift</span>
+                        <span class="terminal-command">stats --blog</span>
+                    </div>
+                    
+                    <div class="terminal-output stats-section">
+                        <div class="stats-content">
+                            <div class="stats-item">
+                                <span class="stats-label">Total Posts:</span>
+                                <span id="total-posts" class="stats-value">0</span>
+                            </div>
+                            <div class="stats-item">
+                                <span class="stats-label">Last Updated:</span>
+                                <span id="last-updated" class="stats-value">2024-06-09</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Stats section -->
-                <div class="terminal-line" style="margin-top: 20px;">
-                    <span class="terminal-prompt">leo@redshift</span>
-                    <span class="terminal-command">stats --blog</span>
-                </div>
-                
-                <div class="terminal-output stats-section">
-                    <div class="stats-content">
-                        <div class="stats-item">
-                            <span class="stats-label">Total Posts:</span>
-                            <span class="stats-value">{{ site.posts | size }}</span>
+                <!-- Blog post detail view -->
+                <div id="blog-post-view" style="display: none;">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">leo@redshift</span>
+                        <span id="cat-command" class="terminal-command">cat posts/post-file.md</span>
+                    </div>
+                    
+                    <div class="terminal-output blog-post-content">
+                        <div class="blog-post-header">
+                            <h1 id="post-title"></h1>
+                            <div class="blog-post-meta">
+                                <span id="post-date"></span>
+                                <span id="post-tags"></span>
+                            </div>
                         </div>
-                        <div class="stats-item">
-                            <span class="stats-label">Last Updated:</span>
-                            <span class="stats-value">{{ site.time | date: "%Y-%m-%d %H:%M" }}</span>
+                        <div id="post-content"></div>
+                        
+                        <div class="terminal-line" style="margin-top: 20px;">
+                            <span class="terminal-prompt">leo@redshift</span>
+                            <span class="terminal-command">cd ..</span>
                         </div>
+                        
+                        <a class="back-to-list" onclick="showBlogList()">
+                            <i class="fas fa-arrow-left"></i> Back to all posts
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Footer now inside terminal -->
+        <!-- Footer -->
         <div class="terminal-footer">
             <p>&copy; 2024 Leo Cai. All rights reserved.</p>
         </div>
@@ -109,6 +420,231 @@ layout: default
     <canvas id="matrix-bg" class="matrix-bg"></canvas>
 
     <!-- JavaScript -->
-    <script src="../assets/js/terminal.js"></script>
+    <script>
+        // Blog posts data
+        const blogPosts = [
+            {
+                id: 1,
+                filename: '2024-04-09-welcome-to-my-blog.md',
+                title: 'Welcome to My Blog',
+                date: '2024-04-09',
+                tags: ['general'],
+                content: `
+# Welcome to My Tech Journey
+
+As a Software Engineer at AWS Redshift, I often encounter interesting technical challenges and solutions. This blog will be a space where I share insights about:
+
+- Database Engineering
+- Distributed Systems
+- Cloud Architecture
+- Software Development Best Practices
+
+## Why I Started This Blog
+
+"Best coding is no coding" - this philosophy has guided my approach to problem-solving. Sometimes the best solution isn't adding more code, but finding simpler ways to solve problems.
+
+## What to Expect
+
+I'll be sharing:
+- Technical deep dives into database systems
+- Cloud architecture patterns
+- Development practices and lessons learned
+- Code snippets and solutions to common problems
+
+### Example Code
+
+Here's a simple example of how I might approach a problem:
+
+\`\`\`python
+def simplify_solution(complex_problem):
+    # First, understand the core issue
+    core_problem = identify_core_issue(complex_problem)
+    
+    # Then, find the simplest possible solution
+    if has_existing_solution(core_problem):
+        return use_existing_solution(core_problem)
+        
+    return develop_minimal_solution(core_problem)
+\`\`\`
+                `
+            }
+            // Add more blog posts here as needed
+        ];
+        
+        // Function to display blog posts list
+        function displayBlogPosts() {
+            const container = document.getElementById('blog-posts-container');
+            container.innerHTML = '';
+            
+            blogPosts.forEach((post, index) => {
+                const row = document.createElement('div');
+                row.className = 'ascii-table-row';
+                
+                // Format date
+                const dateCell = document.createElement('div');
+                dateCell.className = 'ascii-table-cell cell-date';
+                dateCell.textContent = post.date;
+                
+                // Format ID
+                const idCell = document.createElement('div');
+                idCell.className = 'ascii-table-cell cell-id';
+                idCell.textContent = `#${String(index + 1).padStart(3, '0')}`;
+                
+                // Format title with link
+                const titleCell = document.createElement('div');
+                titleCell.className = 'ascii-table-cell cell-title';
+                const titleLink = document.createElement('a');
+                titleLink.className = 'post-link';
+                titleLink.textContent = post.title;
+                titleLink.href = 'javascript:void(0)';
+                titleLink.onclick = () => showBlogPost(post.id);
+                titleCell.appendChild(titleLink);
+                
+                // Format tags
+                const tagsCell = document.createElement('div');
+                tagsCell.className = 'ascii-table-cell cell-tags';
+                if (post.tags && post.tags.length > 0) {
+                    const tagSpan = document.createElement('span');
+                    tagSpan.className = 'post-tag';
+                    tagSpan.textContent = post.tags.join(', ');
+                    tagsCell.appendChild(tagSpan);
+                } else {
+                    const tagSpan = document.createElement('span');
+                    tagSpan.className = 'post-tag';
+                    tagSpan.textContent = 'general';
+                    tagsCell.appendChild(tagSpan);
+                }
+                
+                // Add cells to row
+                row.appendChild(dateCell);
+                row.appendChild(idCell);
+                row.appendChild(titleCell);
+                row.appendChild(tagsCell);
+                
+                // Add row to container
+                container.appendChild(row);
+            });
+            
+            // Update stats
+            document.getElementById('total-posts').textContent = blogPosts.length;
+            document.getElementById('last-updated').textContent = new Date().toISOString().split('T')[0];
+        }
+        
+        // Function to show a specific blog post
+        function showBlogPost(postId) {
+            const post = blogPosts.find(p => p.id === postId);
+            if (!post) return;
+            
+            // Update command
+            document.getElementById('cat-command').textContent = `cat posts/${post.filename}`;
+            
+            // Update post details
+            document.getElementById('post-title').textContent = post.title;
+            document.getElementById('post-date').textContent = `Published: ${post.date}`;
+            
+            // Update tags
+            const tagsElement = document.getElementById('post-tags');
+            tagsElement.innerHTML = '';
+            if (post.tags && post.tags.length > 0) {
+                tagsElement.textContent = ` | Tags: `;
+                post.tags.forEach((tag, index) => {
+                    const tagSpan = document.createElement('span');
+                    tagSpan.className = 'post-tag';
+                    tagSpan.textContent = tag;
+                    tagsElement.appendChild(tagSpan);
+                    
+                    if (index < post.tags.length - 1) {
+                        tagsElement.appendChild(document.createTextNode(' '));
+                    }
+                });
+            }
+            
+            // Update content with markdown formatting
+            const contentElement = document.getElementById('post-content');
+            contentElement.innerHTML = formatMarkdown(post.content);
+            
+            // Hide list view, show post view
+            document.getElementById('blog-list-view').style.display = 'none';
+            document.getElementById('blog-post-view').style.display = 'block';
+        }
+        
+        // Function to show blog list
+        function showBlogList() {
+            document.getElementById('blog-post-view').style.display = 'none';
+            document.getElementById('blog-list-view').style.display = 'block';
+        }
+        
+        // Simple markdown formatter
+        function formatMarkdown(markdown) {
+            if (!markdown) return '';
+            
+            // Replace headers
+            let formatted = markdown
+                .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                .replace(/^#### (.*$)/gm, '<h4>$1</h4>');
+            
+            // Replace lists
+            formatted = formatted.replace(/^\s*-\s*(.*$)/gm, '<li>$1</li>');
+            formatted = formatted.replace(/(<li>.*<\/li>\n)+/g, '<ul>$&</ul>');
+            
+            // Replace code blocks
+            formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+            
+            // Replace inline code
+            formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // Replace paragraphs
+            formatted = formatted.replace(/^(?!<[hou]).+$/gm, '<p>$&</p>');
+            
+            // Fix empty lines
+            formatted = formatted.replace(/<p><\/p>/g, '');
+            
+            return formatted;
+        }
+        
+        // Initialize the blog
+        document.addEventListener('DOMContentLoaded', () => {
+            displayBlogPosts();
+            
+            // Optional: Matrix background effect
+            const canvas = document.getElementById('matrix-bg');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            const fontSize = 10;
+            const columns = canvas.width / fontSize;
+            
+            const drops = [];
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+            
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#0F0';
+                ctx.font = fontSize + 'px monospace';
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    
+                    drops[i]++;
+                }
+            }
+            
+            setInterval(drawMatrix, 50);
+        });
+    </script>
 </body>
 </html>
