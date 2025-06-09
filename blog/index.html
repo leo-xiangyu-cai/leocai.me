@@ -427,10 +427,11 @@
                                '│' + row[1].padEnd(colWidths[1]) + 
                                '│';
                 
-                // Add the title with a link
+                // Add the title with a link to the individual blog post page
                 const title = row[2];
                 const post = blogPosts[i-1];
-                const titleHtml = `<a href="${post.url}" class="post-link">${title}</a>`;
+                const postUrl = `/blog/post.html?post=${post.filename.replace('.md', '')}`;
+                const titleHtml = `<a href="${postUrl}" class="post-link">${title}</a>`;
                 tableContent += titleHtml + ' '.repeat(colWidths[2] - title.length) + '│\n';
                 
                 // Add row divider if not the last row
