@@ -207,58 +207,20 @@
             font-size: 0.9rem;
         }
         
-        /* Blog post content */
-        .blog-post-content {
-            display: none;
-            padding: 20px;
-            margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.03);
-            border-radius: 4px;
-        }
-        
-        .blog-post-content h1 {
+        /* Loading indicator */
+        .loading {
             color: var(--terminal-yellow);
-            margin-top: 0;
+            margin: 20px 0;
+            font-style: italic;
         }
         
-        .blog-post-content h2, 
-        .blog-post-content h3 {
-            color: var(--terminal-blue);
-        }
-        
-        .blog-post-content pre {
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 15px;
+        /* Error message */
+        .error-message {
+            color: var(--terminal-red);
+            margin: 20px 0;
+            padding: 10px;
+            background-color: rgba(224, 108, 117, 0.1);
             border-radius: 4px;
-            overflow-x: auto;
-        }
-        
-        .blog-post-content code {
-            font-family: var(--terminal-font);
-            color: var(--terminal-green);
-        }
-        
-        .blog-post-header {
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed var(--terminal-comment);
-        }
-        
-        .blog-post-meta {
-            color: var(--terminal-comment);
-            font-size: 0.9rem;
-        }
-        
-        .back-to-list {
-            display: inline-block;
-            margin-top: 20px;
-            color: var(--terminal-blue);
-            text-decoration: none;
-            cursor: pointer;
-        }
-        
-        .back-to-list:hover {
-            text-decoration: underline;
         }
         
         /* Matrix Effect (Optional) */
@@ -293,12 +255,20 @@
                 <div id="blog-list-view">
                     <div class="terminal-line">
                         <span class="terminal-prompt">leo@redshift</span>
-                        <span class="terminal-command">ls -la --format=table posts/</span>
+                        <span class="terminal-command">ls -la --format=table _posts/</span>
                     </div>
                     
                     <div class="terminal-output">
+                        <!-- Loading indicator -->
+                        <div id="loading-indicator" class="loading">Loading blog posts...</div>
+                        
+                        <!-- Error message (hidden by default) -->
+                        <div id="error-message" class="error-message" style="display: none;">
+                            Error loading blog posts. Please try again later.
+                        </div>
+                        
                         <!-- Pure ASCII table -->
-                        <pre id="ascii-table" class="ascii-table"></pre>
+                        <pre id="ascii-table" class="ascii-table" style="display: none;"></pre>
                     </div>
                     
                     <!-- Stats section -->
@@ -315,36 +285,9 @@
                             </div>
                             <div class="stats-item">
                                 <span class="stats-label">Last Updated:</span>
-                                <span id="last-updated" class="stats-value">2024-06-09</span>
+                                <span id="last-updated" class="stats-value">Loading...</span>
                             </div>
                         </div>
-                    </div>
-                </div>
-                
-                <!-- Blog post detail view -->
-                <div id="blog-post-view" style="display: none;">
-                    <div class="terminal-line">
-                        <span class="terminal-prompt">leo@redshift</span>
-                        <span id="cat-command" class="terminal-command">cat posts/post-file.md</span>
-                    </div>
-                    
-                    <div class="terminal-output blog-post-content">
-                        <div class="blog-post-header">
-                            <h1 id="post-title"></h1>
-                            <div class="blog-post-meta">
-                                <span id="post-date"></span>
-                            </div>
-                        </div>
-                        <div id="post-content"></div>
-                        
-                        <div class="terminal-line" style="margin-top: 20px;">
-                            <span class="terminal-prompt">leo@redshift</span>
-                            <span class="terminal-command">cd ..</span>
-                        </div>
-                        
-                        <a class="back-to-list" onclick="showBlogList()">
-                            <i class="fas fa-arrow-left"></i> Back to all posts
-                        </a>
                     </div>
                 </div>
             </div>
@@ -361,180 +304,80 @@
 
     <!-- JavaScript -->
     <script>
-        // Blog posts data
-        const blogPosts = [
-            {
-                id: 1,
-                filename: '2024-04-09-welcome-to-my-blog.md',
-                title: 'Welcome to My Blog',
-                date: '2024-04-09',
-                content: `
-# Welcome to My Tech Journey
-
-As a Software Engineer at AWS Redshift, I often encounter interesting technical challenges and solutions. This blog will be a space where I share insights about:
-
-- Database Engineering
-- Distributed Systems
-- Cloud Architecture
-- Software Development Best Practices
-
-## Why I Started This Blog
-
-"Best coding is no coding" - this philosophy has guided my approach to problem-solving. Sometimes the best solution isn't adding more code, but finding simpler ways to solve problems.
-
-## What to Expect
-
-I'll be sharing:
-- Technical deep dives into database systems
-- Cloud architecture patterns
-- Development practices and lessons learned
-- Code snippets and solutions to common problems
-
-### Example Code
-
-Here's a simple example of how I might approach a problem:
-
-\`\`\`python
-def simplify_solution(complex_problem):
-    # First, understand the core issue
-    core_problem = identify_core_issue(complex_problem)
-    
-    # Then, find the simplest possible solution
-    if has_existing_solution(core_problem):
-        return use_existing_solution(core_problem)
-        
-    return develop_minimal_solution(core_problem)
-\`\`\`
-                `
-            },
-            {
-                id: 2,
-                filename: '2024-05-15-distributed-systems-challenges.md',
-                title: 'Challenges in Distributed Database Systems',
-                date: '2024-05-15',
-                content: `
-# Challenges in Distributed Database Systems
-
-Working on distributed database systems at AWS Redshift has exposed me to numerous interesting challenges. In this post, I'll discuss some of the most common issues and potential solutions.
-
-## The CAP Theorem Trade-offs
-
-The CAP theorem states that a distributed system can only provide two of the following three guarantees:
-
-- **Consistency**: Every read receives the most recent write
-- **Availability**: Every request receives a response
-- **Partition tolerance**: The system continues to operate despite network partitions
-
-Making the right trade-offs depends on your specific use case:
-
-- Banking systems typically prioritize consistency over availability
-- Content delivery systems often choose availability over consistency
-- All distributed systems must handle partition tolerance
-
-## Handling Eventual Consistency
-
-When working with eventually consistent systems, consider these strategies:
-
-1. **Versioning**: Use vector clocks or timestamps to track versions
-2. **Conflict resolution**: Implement merge strategies for conflicting writes
-3. **Read-your-writes consistency**: Ensure users see their own updates immediately
-
-## Performance Optimization Techniques
-
-Some techniques I've found effective:
-
-\`\`\`sql
--- Example of a query optimization
-SELECT customer_id, SUM(order_total) 
-FROM orders 
-WHERE order_date > '2024-01-01'
-GROUP BY customer_id
-HAVING SUM(order_total) > 1000
-ORDER BY SUM(order_total) DESC
-LIMIT 100;
-\`\`\`
-
-The above query can be optimized by:
-- Adding appropriate indexes
-- Partitioning data by date
-- Pre-aggregating common calculations
-
-I'll dive deeper into each of these topics in future posts.
-                `
-            },
-            {
-                id: 3,
-                filename: '2024-06-01-terminal-ui-design.md',
-                title: 'Creating Effective Terminal-Style UIs',
-                date: '2024-06-01',
-                content: `
-# Creating Effective Terminal-Style UIs
-
-Terminal-style UIs have seen a resurgence in popularity, especially among developers and tech enthusiasts. In this post, I'll share some insights on creating effective terminal-style interfaces for web applications.
-
-## Why Terminal UIs Are Making a Comeback
-
-There are several reasons for the renewed interest in terminal aesthetics:
-
-1. **Nostalgia**: Many developers have fond memories of text-based interfaces
-2. **Focus on content**: Terminal UIs minimize distractions
-3. **Keyboard-centric**: Power users appreciate keyboard navigation
-4. **Distinctive look**: Stands out in a world of flat and material designs
-
-## Key Design Principles
-
-When designing a terminal-style UI, consider these principles:
-
-- **Monospace fonts**: Use fonts like Fira Code or JetBrains Mono
-- **Limited color palette**: Stick to a few well-chosen colors
-- **Command-based interaction**: Implement familiar terminal commands
-- **Progressive disclosure**: Start simple, reveal complexity as needed
-
-## CSS Techniques
-
-Here's a simple example of CSS for a terminal-style interface:
-
-\`\`\`css
-:root {
-  --terminal-bg: #282c34;
-  --terminal-text: #abb2bf;
-  --terminal-green: #98c379;
-  --terminal-blue: #61afef;
-}
-
-.terminal {
-  background-color: var(--terminal-bg);
-  color: var(--terminal-text);
-  font-family: 'Fira Code', monospace;
-  padding: 20px;
-  border-radius: 6px;
-}
-
-.prompt {
-  color: var(--terminal-green);
-}
-
-.command {
-  color: var(--terminal-blue);
-}
-\`\`\`
-
-## Accessibility Considerations
-
-Terminal UIs can present accessibility challenges. Always ensure:
-
-- Sufficient color contrast
-- Keyboard navigability
-- Screen reader compatibility
-- Resizable text
-
-I hope these tips help you create compelling terminal-style interfaces for your own projects!
-                `
+        // Function to fetch and parse blog posts from _posts directory
+        async function fetchBlogPosts() {
+            try {
+                // Show loading indicator
+                document.getElementById('loading-indicator').style.display = 'block';
+                document.getElementById('ascii-table').style.display = 'none';
+                document.getElementById('error-message').style.display = 'none';
+                
+                // Fetch the list of files in the _posts directory
+                const response = await fetch('/_posts/');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch blog posts');
+                }
+                
+                const html = await response.text();
+                
+                // Parse the HTML to extract file names
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const links = Array.from(doc.querySelectorAll('a'));
+                
+                // Filter for markdown files
+                const mdFiles = links
+                    .map(link => link.getAttribute('href'))
+                    .filter(href => href && href.endsWith('.md'))
+                    .map(href => href);
+                
+                // Parse each file name to extract date and title
+                const blogPosts = mdFiles.map(filename => {
+                    // Extract date and title from filename (format: YYYY-MM-DD-title.md)
+                    const match = filename.match(/^(\d{4}-\d{2}-\d{2})-(.+)\.md$/);
+                    
+                    if (match) {
+                        const date = match[1];
+                        const title = match[2].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        
+                        return {
+                            filename,
+                            date,
+                            title,
+                            url: `/blog/${filename.replace('.md', '')}`
+                        };
+                    }
+                    
+                    return null;
+                }).filter(post => post !== null);
+                
+                // Sort by date (newest first)
+                blogPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // Generate the ASCII table
+                generateAsciiTable(blogPosts);
+                
+                // Update stats
+                document.getElementById('total-posts').textContent = blogPosts.length;
+                document.getElementById('last-updated').textContent = new Date().toISOString().split('T')[0];
+                
+                // Hide loading indicator, show table
+                document.getElementById('loading-indicator').style.display = 'none';
+                document.getElementById('ascii-table').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error fetching blog posts:', error);
+                
+                // Show error message
+                document.getElementById('loading-indicator').style.display = 'none';
+                document.getElementById('error-message').style.display = 'block';
+                document.getElementById('error-message').textContent = 'Error loading blog posts: ' + error.message;
             }
-        ];
+        }
         
         // Function to generate pure ASCII table
-        function generateAsciiTable() {
+        function generateAsciiTable(blogPosts) {
             const tableElement = document.getElementById('ascii-table');
             
             // Create a plain text table without HTML tags first
@@ -584,11 +427,10 @@ I hope these tips help you create compelling terminal-style interfaces for your 
                                '│' + row[1].padEnd(colWidths[1]) + 
                                '│';
                 
-                // Add the title with a link to the individual blog post page
+                // Add the title with a link
                 const title = row[2];
                 const post = blogPosts[i-1];
-                const postUrl = `/blog/${post.filename.replace('.md', '')}`;
-                const titleHtml = `<a href="${postUrl}" class="post-link">${title}</a>`;
+                const titleHtml = `<a href="${post.url}" class="post-link">${title}</a>`;
                 tableContent += titleHtml + ' '.repeat(colWidths[2] - title.length) + '│\n';
                 
                 // Add row divider if not the last row
@@ -603,70 +445,10 @@ I hope these tips help you create compelling terminal-style interfaces for your 
             tableElement.innerHTML = tableContent;
         }
         
-        // Function to show a specific blog post
-        function showBlogPost(postId) {
-            const post = blogPosts.find(p => p.id === postId);
-            if (!post) return;
-            
-            // Update command
-            document.getElementById('cat-command').textContent = `cat posts/${post.filename}`;
-            
-            // Update post details
-            document.getElementById('post-title').textContent = post.title;
-            document.getElementById('post-date').textContent = `Published: ${post.date}`;
-            
-            // Update content with markdown formatting
-            const contentElement = document.getElementById('post-content');
-            contentElement.innerHTML = formatMarkdown(post.content);
-            
-            // Hide list view, show post view
-            document.getElementById('blog-list-view').style.display = 'none';
-            document.getElementById('blog-post-view').style.display = 'block';
-        }
-        
-        // Function to show blog list
-        function showBlogList() {
-            document.getElementById('blog-post-view').style.display = 'none';
-            document.getElementById('blog-list-view').style.display = 'block';
-        }
-        
-        // Simple markdown formatter
-        function formatMarkdown(markdown) {
-            if (!markdown) return '';
-            
-            // Replace headers
-            let formatted = markdown
-                .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-                .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-                .replace(/^#### (.*$)/gm, '<h4>$1</h4>');
-            
-            // Replace lists
-            formatted = formatted.replace(/^\s*-\s*(.*$)/gm, '<li>$1</li>');
-            formatted = formatted.replace(/(<li>.*<\/li>\n)+/g, '<ul>$&</ul>');
-            
-            // Replace code blocks
-            formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-            
-            // Replace inline code
-            formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
-            
-            // Replace paragraphs
-            formatted = formatted.replace(/^(?!<[hou]).+$/gm, '<p>$&</p>');
-            
-            // Fix empty lines
-            formatted = formatted.replace(/<p><\/p>/g, '');
-            
-            return formatted;
-        }
-        
         // Initialize the blog
         document.addEventListener('DOMContentLoaded', () => {
-            generateAsciiTable();
-            
-            // Update stats
-            document.getElementById('total-posts').textContent = blogPosts.length;
-            document.getElementById('last-updated').textContent = new Date().toISOString().split('T')[0];
+            // Fetch blog posts
+            fetchBlogPosts();
             
             // Optional: Matrix background effect
             const canvas = document.getElementById('matrix-bg');
