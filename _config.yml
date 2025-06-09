@@ -1,0 +1,31 @@
+# Site settings
+title: Leo Cai
+description: Software Engineer @ AWS Redshift
+author: Leo Cai
+url: "https://leocai.me"
+
+# Theme settings (using the minimal theme for clean look)
+theme: minimal
+
+# Blog settings
+permalink: /blog/:year/:month/:day/:title/
+
+# Navigation links
+header_pages:
+  - about.md
+  - blog.md
+
+# Markdown processor settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Files to exclude from processing
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
