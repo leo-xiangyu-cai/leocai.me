@@ -379,6 +379,12 @@ body, html {
     color: var(--terminal-text);
 }
 
+/* ASCII table box characters */
+.ascii-table {
+    color: var(--terminal-comment);
+}
+
+/* Table content */
 .ascii-table a.post-link {
     color: var(--terminal-blue);
     text-decoration: none;
