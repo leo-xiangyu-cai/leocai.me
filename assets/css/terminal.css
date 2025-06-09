@@ -370,28 +370,133 @@ body, html {
     opacity: 0.05;
 }
 
-/* Blog post listing */
-.blog-post-item {
+/* Blog post listing - Terminal Table Style */
+.terminal-table-header,
+.terminal-table-row,
+.terminal-table-separator {
     display: flex;
-    margin-bottom: 15px;
-    padding: 10px;
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
+    width: 100%;
+    padding: 5px 0;
+    font-family: var(--terminal-font);
 }
 
-.post-date {
+.terminal-table-header {
+    color: var(--terminal-yellow);
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.terminal-table-separator {
     color: var(--terminal-comment);
-    margin-right: 20px;
-    min-width: 100px;
+    margin-bottom: 10px;
 }
 
-.post-title a {
+.terminal-table-row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 8px 0;
+    transition: background-color 0.2s ease;
+}
+
+.terminal-table-row:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.terminal-table-cell {
+    padding-right: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cell-date {
+    width: 110px;
+    color: var(--terminal-comment);
+}
+
+.cell-id {
+    width: 50px;
+    color: var(--terminal-green);
+}
+
+.cell-title {
+    flex: 1;
+    min-width: 200px;
+}
+
+.cell-title a {
     color: var(--terminal-blue);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-.post-title a:hover {
+.cell-title a:hover {
     color: var(--terminal-cyan);
     text-decoration: underline;
+}
+
+.cell-tags {
+    width: 150px;
+    text-align: right;
+}
+
+.post-tag {
+    display: inline-block;
+    background-color: rgba(97, 175, 239, 0.1);
+    color: var(--terminal-cyan);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    margin-right: 5px;
+}
+
+/* README section */
+.readme-section {
+    margin-top: 10px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-left: 3px solid var(--terminal-yellow);
+    border-radius: 3px;
+}
+
+.readme-title {
+    color: var(--terminal-yellow);
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.readme-commands {
+    list-style: none;
+    padding-left: 5px;
+}
+
+.readme-commands li {
+    margin-bottom: 5px;
+}
+
+/* Stats section */
+.stats-section {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 3px;
+}
+
+.stats-content {
+    display: flex;
+    gap: 20px;
+}
+
+.stats-item {
+    display: flex;
+    align-items: center;
+}
+
+.stats-label {
+    color: var(--terminal-purple);
+    margin-right: 8px;
+}
+
+.stats-value {
+    color: var(--terminal-text);
+    font-weight: bold;
 }

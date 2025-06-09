@@ -33,16 +33,81 @@ layout: default
             <div id="terminal-output">
                 <div class="terminal-line">
                     <span class="terminal-prompt">leo@redshift</span>
-                    <span class="terminal-command">ls -la posts/</span>
+                    <span class="terminal-command">ls -la --format=table posts/</span>
                 </div>
+                
                 <div class="terminal-output">
-                    <!-- Blog post listing here -->
+                    <!-- Command output header -->
+                    <div class="terminal-table-header">
+                        <span class="terminal-table-cell cell-date">DATE</span>
+                        <span class="terminal-table-cell cell-id">ID</span>
+                        <span class="terminal-table-cell cell-title">TITLE</span>
+                        <span class="terminal-table-cell cell-tags">TAGS</span>
+                    </div>
+                    
+                    <!-- Separator line -->
+                    <div class="terminal-table-separator">
+                        <span class="terminal-table-cell cell-date">----------</span>
+                        <span class="terminal-table-cell cell-id">----</span>
+                        <span class="terminal-table-cell cell-title">---------------------</span>
+                        <span class="terminal-table-cell cell-tags">-----------</span>
+                    </div>
+                    
+                    <!-- Blog post listing as table rows -->
                     {% for post in site.posts %}
-                    <div class="blog-post-item">
-                        <div class="post-date">{{ post.date | date: "%Y-%m-%d" }}</div>
-                        <div class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></div>
+                    <div class="terminal-table-row">
+                        <span class="terminal-table-cell cell-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+                        <span class="terminal-table-cell cell-id">{{ forloop.index | prepend: '#' }}</span>
+                        <span class="terminal-table-cell cell-title"><a href="{{ post.url }}">{{ post.title }}</a></span>
+                        <span class="terminal-table-cell cell-tags">
+                            {% if post.tags %}
+                                {% for tag in post.tags %}
+                                <span class="post-tag">{{ tag }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="post-tag">general</span>
+                            {% endif %}
+                        </span>
                     </div>
                     {% endfor %}
+                </div>
+                
+                <!-- Command prompt after listing -->
+                <div class="terminal-line" style="margin-top: 20px;">
+                    <span class="terminal-prompt">leo@redshift</span>
+                    <span class="terminal-command">cat README.md</span>
+                </div>
+                
+                <div class="terminal-output readme-section">
+                    <div class="readme-content">
+                        <h3 class="readme-title">📝 Leo's Tech Blog</h3>
+                        <p>Welcome to my technical blog where I share insights about database engineering, distributed systems, and software development best practices.</p>
+                        <p>Use the following commands to navigate:</p>
+                        <ul class="readme-commands">
+                            <li><span class="command-keyword">cd /</span> - Return to homepage</li>
+                            <li><span class="command-keyword">cat posts/#ID</span> - Read a specific post</li>
+                            <li><span class="command-keyword">grep "keyword" posts/</span> - Search for posts</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Stats section -->
+                <div class="terminal-line" style="margin-top: 20px;">
+                    <span class="terminal-prompt">leo@redshift</span>
+                    <span class="terminal-command">stats --blog</span>
+                </div>
+                
+                <div class="terminal-output stats-section">
+                    <div class="stats-content">
+                        <div class="stats-item">
+                            <span class="stats-label">Total Posts:</span>
+                            <span class="stats-value">{{ site.posts | size }}</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-label">Last Updated:</span>
+                            <span class="stats-value">{{ site.time | date: "%Y-%m-%d %H:%M" }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
