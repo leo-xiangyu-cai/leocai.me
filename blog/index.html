@@ -36,6 +36,12 @@ layout: default
             color: #56b6c2; /* Terminal cyan */
             text-decoration: underline;
         }
+        
+        /* Fix for table alignment */
+        .post-row {
+            display: inline-block;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -61,11 +67,15 @@ layout: default
                 
                 <div class="terminal-output">
                     <!-- ASCII art table with fixed formatting -->
-                    <pre class="ascii-table">┌────────────┬──────┬─────────────────────────────┬───────────────┐
+                    <div class="ascii-table">
+                        <pre>┌────────────┬──────┬─────────────────────────────┬───────────────┐
 │    DATE    │  ID  │           TITLE             │     TAGS      │
-├────────────┼──────┼─────────────────────────────┼───────────────┤{% for post in site.posts %}
-│ {{ post.date | date: "%Y-%m-%d" }} │ #{{ forloop.index | prepend: '   ' | slice: -3, 3 }} │ <a href="{{ post.url }}" class="post-link">{{ post.title | truncate: 25 | ljust: 25 }}</a> │ {% if post.tags %}{% for tag in post.tags limit:2 %}{{ tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% if post.tags.size > 2 %}...{% endif %}{% else %}general{% endif %} │{% endfor %}
-└────────────┴──────┴─────────────────────────────┴───────────────┘</pre>
+├────────────┼──────┼─────────────────────────────┼───────────────┤</pre>
+                        {% for post in site.posts %}
+                        <pre class="post-row">│ {{ post.date | date: "%Y-%m-%d" }} │ #{{ forloop.index | prepend: '   ' | slice: -3, 3 }} │ <a href="{{ post.url }}" class="post-link">{{ post.title | truncate: 25 | ljust: 25 }}</a> │ {% if post.tags %}{% for tag in post.tags limit:2 %}{{ tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% if post.tags.size > 2 %}...{% endif %}{% else %}general{% endif %} │</pre>
+                        {% endfor %}
+                        <pre>└────────────┴──────┴─────────────────────────────┴───────────────┘</pre>
+                    </div>
                 </div>
                 
                 <!-- Stats section -->
