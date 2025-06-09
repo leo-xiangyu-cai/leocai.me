@@ -6,9 +6,19 @@ layout: default
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page.title }} - Leo Cai's Blog</title>
+    <title>{{ page.title }} | Leo Cai</title>
+    <meta name="description" content="{{ page.excerpt | strip_html | truncate: 160 }}">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/blog.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="/icon.webp" type="image/webp">
+    <!-- Open Graph tags for better social sharing -->
+    <meta property="og:title" content="{{ page.title }} | Leo Cai">
+    <meta property="og:description" content="{{ page.excerpt | strip_html | truncate: 160 }}">
+    <meta property="og:image" content="https://leocai.me/icon.webp">
+    <meta property="og:url" content="https://leocai.me{{ page.url }}">
 </head>
 <body>
     <nav class="nav">
@@ -21,16 +31,13 @@ layout: default
         </div>
     </nav>
 
-    <main class="post-content">
-        <article>
+    <main class="blog-post">
+        <article class="container">
             <header class="post-header">
                 <h1>{{ page.title }}</h1>
-                <time datetime="{{ page.date | date_to_xmlschema }}">
-                    {{ page.date | date: "%B %d, %Y" }}
-                </time>
+                <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
             </header>
-            
-            <div class="post-body">
+            <div class="post-content">
                 {{ content }}
             </div>
         </article>
@@ -43,4 +50,3 @@ layout: default
     </footer>
 </body>
 </html>
-

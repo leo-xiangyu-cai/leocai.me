@@ -1,99 +1,214 @@
 /* Blog specific styles */
+
 .blog-list {
-    padding: 5rem 0;
+    padding: 120px 0 80px;
+}
+
+.blog-list .container {
+    max-width: 900px;
 }
 
 .blog-list h1 {
-    text-align: center;
+    font-size: 2.8rem;
     margin-bottom: 3rem;
-    color: var(--primary-color);
+    color: var(--text-color);
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+}
+
+.blog-list h1::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+    border-radius: 2px;
 }
 
 .post-list {
     list-style: none;
-    max-width: 800px;
-    margin: 0 auto;
 }
 
 .post-item {
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 3rem;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: all var(--transition-speed) ease;
 }
 
-.post-item:last-child {
-    border-bottom: none;
+.post-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
 .post-item a {
+    display: block;
+    padding: 2.5rem;
     text-decoration: none;
     color: var(--text-color);
 }
 
 .post-item h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.8rem;
     color: var(--primary-color);
-    margin-bottom: 0.5rem;
+    transition: color var(--transition-speed) ease;
+}
+
+.post-item:hover h2 {
+    color: var(--accent-color);
 }
 
 .post-item time {
-    color: var(--secondary-color);
+    display: block;
     font-size: 0.9rem;
+    color: var(--light-text);
+    margin-bottom: 1.2rem;
+    font-weight: 500;
 }
 
 .post-item p {
-    margin-top: 1rem;
     color: var(--secondary-color);
+    line-height: 1.7;
 }
 
-.post-content {
-    padding: 5rem 0;
+/* Blog post styles */
+.blog-post {
+    padding: 120px 0 80px;
+}
+
+.blog-post .container {
     max-width: 800px;
-    margin: 0 auto;
 }
 
 .post-header {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
     text-align: center;
 }
 
 .post-header h1 {
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
 }
 
 .post-header time {
-    color: var(--secondary-color);
-    font-size: 0.9rem;
+    font-size: 1rem;
+    color: var(--light-text);
+    font-weight: 500;
 }
 
-.post-body {
+.post-content {
+    font-size: 1.1rem;
     line-height: 1.8;
 }
 
-.post-body h2, .post-body h3 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+.post-content h1 {
+    font-size: 2.5rem;
+    margin: 2rem 0 1.5rem;
     color: var(--primary-color);
 }
 
-.post-body p {
-    margin-bottom: 1rem;
+.post-content h2 {
+    font-size: 2rem;
+    margin: 2rem 0 1.2rem;
+    color: var(--primary-color);
 }
 
-.post-body ul, .post-body ol {
-    margin-bottom: 1rem;
+.post-content h3 {
+    font-size: 1.5rem;
+    margin: 1.8rem 0 1rem;
+    color: var(--primary-color);
+}
+
+.post-content p {
+    margin-bottom: 1.5rem;
+}
+
+.post-content ul, .post-content ol {
+    margin: 1.5rem 0;
     padding-left: 2rem;
 }
 
-.post-body img {
-    max-width: 100%;
-    height: auto;
-    margin: 1rem 0;
+.post-content li {
+    margin-bottom: 0.8rem;
 }
 
+.post-content code {
+    background-color: var(--section-bg-color);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9em;
+}
+
+.post-content pre {
+    background-color: #f6f8fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 2rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.post-content pre code {
+    background-color: transparent;
+    padding: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.post-content blockquote {
+    border-left: 4px solid var(--primary-color);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--secondary-color);
+}
+
+/* Responsive styles */
 @media (max-width: 768px) {
-    .post-content {
-        padding: 3rem 20px;
+    .blog-list h1, .post-header h1 {
+        font-size: 2.2rem;
+    }
+    
+    .post-item a {
+        padding: 1.8rem;
+    }
+    
+    .post-item h2 {
+        font-size: 1.5rem;
+    }
+    
+    .post-content h1 {
+        font-size: 2rem;
+    }
+    
+    .post-content h2 {
+        font-size: 1.7rem;
+    }
+    
+    .post-content h3 {
+        font-size: 1.4rem;
     }
 }
 
+@media (max-width: 480px) {
+    .blog-list h1, .post-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .post-item h2 {
+        font-size: 1.3rem;
+    }
+    
+    .post-content {
+        font-size: 1rem;
+    }
+}
