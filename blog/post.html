@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leo Cai - Blog</title>
+    <title>Blog Post - Leo Cai</title>
     <meta name="description" content="Leo Cai's blog - Thoughts on software engineering, database systems, and more">
     <link rel="stylesheet" href="../assets/css/terminal.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -147,56 +147,6 @@
             white-space: pre-wrap;
         }
         
-        /* Pure ASCII Table Style */
-        .ascii-table {
-            font-family: 'Fira Code', monospace;
-            white-space: pre;
-            color: var(--terminal-comment);
-            font-size: 14px;
-            line-height: 1.5;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .ascii-table a {
-            color: var(--terminal-blue);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        
-        .ascii-table a:hover {
-            color: var(--terminal-cyan);
-            text-decoration: underline;
-        }
-        
-        /* Stats section */
-        .stats-section {
-            margin-top: 10px;
-            padding: 10px 15px;
-            background-color: rgba(255, 255, 255, 0.03);
-            border-radius: 3px;
-        }
-        
-        .stats-content {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .stats-item {
-            display: flex;
-            align-items: center;
-        }
-        
-        .stats-label {
-            color: var(--terminal-purple);
-            margin-right: 8px;
-        }
-        
-        .stats-value {
-            color: var(--terminal-text);
-            font-weight: bold;
-        }
-        
         /* Footer */
         .terminal-footer {
             background-color: var(--terminal-bg);
@@ -209,7 +159,6 @@
         
         /* Blog post content */
         .blog-post-content {
-            display: none;
             padding: 20px;
             margin-top: 20px;
             background-color: rgba(255, 255, 255, 0.03);
@@ -254,7 +203,6 @@
             margin-top: 20px;
             color: var(--terminal-blue);
             text-decoration: none;
-            cursor: pointer;
         }
         
         .back-to-list:hover {
@@ -271,6 +219,38 @@
             z-index: -1;
             opacity: 0.05;
         }
+        
+        /* Blog content */
+        .blog-content {
+            line-height: 1.6;
+        }
+        
+        .blog-content p {
+            margin-bottom: 1.2em;
+        }
+        
+        .blog-content ul {
+            margin-bottom: 1.2em;
+            padding-left: 20px;
+        }
+        
+        .blog-content li {
+            margin-bottom: 0.5em;
+        }
+        
+        .blog-content pre {
+            margin: 1.5em 0;
+        }
+        
+        /* Error message */
+        .error-message {
+            color: var(--terminal-red);
+            font-weight: bold;
+            padding: 20px;
+            background-color: rgba(224, 108, 117, 0.1);
+            border-radius: 4px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -280,72 +260,40 @@
             <div class="terminal-button terminal-close"></div>
             <div class="terminal-button terminal-minimize"></div>
             <div class="terminal-button terminal-maximize"></div>
-            <div class="terminal-title">leo@redshift: ~/blog</div>
+            <div class="terminal-title">leo@redshift: ~/blog/posts</div>
             <!-- Terminal Tabs -->
             <div class="terminal-tabs">
                 <a href="/" class="terminal-tab">Home</a>
-                <a href="/blog" class="terminal-tab active">Blog</a>
+                <a href="/blog" class="terminal-tab">Blog</a>
+                <a href="#" class="terminal-tab active" id="post-tab">Post</a>
             </div>
         </div>
         <div class="terminal-body">
             <div id="terminal-output">
-                <!-- Blog post listing view -->
-                <div id="blog-list-view">
-                    <div class="terminal-line">
-                        <span class="terminal-prompt">leo@redshift</span>
-                        <span class="terminal-command">ls -la --format=table posts/</span>
-                    </div>
-                    
-                    <div class="terminal-output">
-                        <!-- Pure ASCII table -->
-                        <pre id="ascii-table" class="ascii-table"></pre>
-                    </div>
-                    
-                    <!-- Stats section -->
-                    <div class="terminal-line" style="margin-top: 20px;">
-                        <span class="terminal-prompt">leo@redshift</span>
-                        <span class="terminal-command">stats --blog</span>
-                    </div>
-                    
-                    <div class="terminal-output stats-section">
-                        <div class="stats-content">
-                            <div class="stats-item">
-                                <span class="stats-label">Total Posts:</span>
-                                <span id="total-posts" class="stats-value">0</span>
-                            </div>
-                            <div class="stats-item">
-                                <span class="stats-label">Last Updated:</span>
-                                <span id="last-updated" class="stats-value">2024-06-09</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">leo@redshift</span>
+                    <span class="terminal-command" id="cat-command">cat posts/blog-post.md</span>
                 </div>
                 
-                <!-- Blog post detail view -->
-                <div id="blog-post-view" style="display: none;">
-                    <div class="terminal-line">
-                        <span class="terminal-prompt">leo@redshift</span>
-                        <span id="cat-command" class="terminal-command">cat posts/post-file.md</span>
+                <div class="terminal-output blog-post-content">
+                    <div class="blog-post-header">
+                        <h1 id="post-title">Loading...</h1>
+                        <div class="blog-post-meta">
+                            Published: <span id="post-date">Loading...</span>
+                        </div>
+                    </div>
+                    <div id="post-content" class="blog-content">
+                        Loading post content...
                     </div>
                     
-                    <div class="terminal-output blog-post-content">
-                        <div class="blog-post-header">
-                            <h1 id="post-title"></h1>
-                            <div class="blog-post-meta">
-                                <span id="post-date"></span>
-                            </div>
-                        </div>
-                        <div id="post-content"></div>
-                        
-                        <div class="terminal-line" style="margin-top: 20px;">
-                            <span class="terminal-prompt">leo@redshift</span>
-                            <span class="terminal-command">cd ..</span>
-                        </div>
-                        
-                        <a class="back-to-list" onclick="showBlogList()">
-                            <i class="fas fa-arrow-left"></i> Back to all posts
-                        </a>
+                    <div class="terminal-line" style="margin-top: 20px;">
+                        <span class="terminal-prompt">leo@redshift</span>
+                        <span class="terminal-command">cd ..</span>
                     </div>
+                    
+                    <a href="/blog" class="back-to-list">
+                        <i class="fas fa-arrow-left"></i> Back to all posts
+                    </a>
                 </div>
             </div>
         </div>
@@ -533,103 +481,6 @@ I hope these tips help you create compelling terminal-style interfaces for your 
             }
         ];
         
-        // Function to generate pure ASCII table
-        function generateAsciiTable() {
-            const tableElement = document.getElementById('ascii-table');
-            
-            // Create a plain text table without HTML tags first
-            let plainTable = [];
-            
-            // Add header row
-            plainTable.push(['DATE', 'ID', 'TITLE']);
-            
-            // Add data rows
-            blogPosts.forEach((post, index) => {
-                const id = `#${String(index + 1).padStart(3, '0')}`;
-                const title = post.title;
-                plainTable.push([post.date, id, title]);
-            });
-            
-            // Calculate column widths based on content
-            const colWidths = [0, 0, 0];
-            plainTable.forEach(row => {
-                for (let i = 0; i < row.length; i++) {
-                    colWidths[i] = Math.max(colWidths[i], row[i].length);
-                }
-            });
-            
-            // Add some padding
-            colWidths[0] += 2; // DATE
-            colWidths[1] += 2; // ID
-            colWidths[2] += 2; // TITLE
-            
-            // Generate the ASCII table
-            let tableContent = '';
-            
-            // Top border
-            tableContent += '┌' + '─'.repeat(colWidths[0]) + '┬' + '─'.repeat(colWidths[1]) + '┬' + '─'.repeat(colWidths[2]) + '┐\n';
-            
-            // Header row
-            tableContent += '│' + plainTable[0][0].padEnd(colWidths[0]) + 
-                           '│' + plainTable[0][1].padEnd(colWidths[1]) + 
-                           '│' + plainTable[0][2].padEnd(colWidths[2]) + '│\n';
-            
-            // Header-data separator
-            tableContent += '├' + '─'.repeat(colWidths[0]) + '┼' + '─'.repeat(colWidths[1]) + '┼' + '─'.repeat(colWidths[2]) + '┤\n';
-            
-            // Data rows
-            for (let i = 1; i < plainTable.length; i++) {
-                const row = plainTable[i];
-                tableContent += '│' + row[0].padEnd(colWidths[0]) + 
-                               '│' + row[1].padEnd(colWidths[1]) + 
-                               '│';
-                
-                // Add the title with a link to the individual blog post page
-                const title = row[2];
-                const post = blogPosts[i-1];
-                const postUrl = `/blog/${post.filename.replace('.md', '')}`;
-                const titleHtml = `<a href="${postUrl}" class="post-link">${title}</a>`;
-                tableContent += titleHtml + ' '.repeat(colWidths[2] - title.length) + '│\n';
-                
-                // Add row divider if not the last row
-                if (i < plainTable.length - 1) {
-                    tableContent += '├' + '─'.repeat(colWidths[0]) + '┼' + '─'.repeat(colWidths[1]) + '┼' + '─'.repeat(colWidths[2]) + '┤\n';
-                }
-            }
-            
-            // Bottom border
-            tableContent += '└' + '─'.repeat(colWidths[0]) + '┴' + '─'.repeat(colWidths[1]) + '┴' + '─'.repeat(colWidths[2]) + '┘';
-            
-            tableElement.innerHTML = tableContent;
-        }
-        
-        // Function to show a specific blog post
-        function showBlogPost(postId) {
-            const post = blogPosts.find(p => p.id === postId);
-            if (!post) return;
-            
-            // Update command
-            document.getElementById('cat-command').textContent = `cat posts/${post.filename}`;
-            
-            // Update post details
-            document.getElementById('post-title').textContent = post.title;
-            document.getElementById('post-date').textContent = `Published: ${post.date}`;
-            
-            // Update content with markdown formatting
-            const contentElement = document.getElementById('post-content');
-            contentElement.innerHTML = formatMarkdown(post.content);
-            
-            // Hide list view, show post view
-            document.getElementById('blog-list-view').style.display = 'none';
-            document.getElementById('blog-post-view').style.display = 'block';
-        }
-        
-        // Function to show blog list
-        function showBlogList() {
-            document.getElementById('blog-post-view').style.display = 'none';
-            document.getElementById('blog-list-view').style.display = 'block';
-        }
-        
         // Simple markdown formatter
         function formatMarkdown(markdown) {
             if (!markdown) return '';
@@ -660,13 +511,46 @@ I hope these tips help you create compelling terminal-style interfaces for your 
             return formatted;
         }
         
-        // Initialize the blog
-        document.addEventListener('DOMContentLoaded', () => {
-            generateAsciiTable();
+        // Function to load blog post based on URL
+        function loadBlogPost() {
+            // Get the post filename from the URL
+            const path = window.location.pathname;
+            const postFilename = path.split('/').pop() + '.md';
             
-            // Update stats
-            document.getElementById('total-posts').textContent = blogPosts.length;
-            document.getElementById('last-updated').textContent = new Date().toISOString().split('T')[0];
+            // Find the post in our data
+            const post = blogPosts.find(p => p.filename === postFilename);
+            
+            if (post) {
+                // Update the page title
+                document.title = post.title + ' - Leo Cai';
+                
+                // Update the tab title
+                document.getElementById('post-tab').textContent = post.title.length > 20 ? 
+                    post.title.substring(0, 17) + '...' : post.title;
+                
+                // Update the command
+                document.getElementById('cat-command').textContent = `cat posts/${post.filename}`;
+                
+                // Update post details
+                document.getElementById('post-title').textContent = post.title;
+                document.getElementById('post-date').textContent = post.date;
+                
+                // Update content with markdown formatting
+                document.getElementById('post-content').innerHTML = formatMarkdown(post.content);
+            } else {
+                // Post not found
+                document.title = 'Post Not Found - Leo Cai';
+                document.getElementById('post-tab').textContent = 'Not Found';
+                document.getElementById('cat-command').textContent = `cat posts/not-found.md`;
+                document.getElementById('post-title').textContent = 'Post Not Found';
+                document.getElementById('post-date').textContent = '';
+                document.getElementById('post-content').innerHTML = '<div class="error-message">Sorry, the requested blog post could not be found.</div>';
+            }
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBlogPost();
             
             // Optional: Matrix background effect
             const canvas = document.getElementById('matrix-bg');
