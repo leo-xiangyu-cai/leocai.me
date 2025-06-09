@@ -147,86 +147,26 @@
             white-space: pre-wrap;
         }
         
-        /* ASCII Table Style */
-        .terminal-table {
-            font-family: var(--terminal-font);
-            border-collapse: collapse;
-            width: 100%;
-            max-width: 900px;
-            margin: 0;
-            color: var(--terminal-text);
-            font-size: 14px;
-        }
-        
-        .terminal-table-border {
-            color: var(--terminal-comment);
+        /* Pure ASCII Table Style */
+        .ascii-table {
+            font-family: 'Fira Code', monospace;
             white-space: pre;
-            line-height: 1;
+            color: var(--terminal-comment);
+            font-size: 14px;
+            line-height: 1.5;
             margin: 0;
             padding: 0;
         }
         
-        .terminal-table-row {
-            display: flex;
-            width: 100%;
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .terminal-table-header {
-            color: var(--terminal-yellow);
-            font-weight: bold;
-            border-bottom: 1px solid var(--terminal-comment);
-            margin-bottom: 5px;
-        }
-        
-        .terminal-table-cell {
-            padding: 0 5px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        
-        .cell-date {
-            width: 110px;
-            flex-shrink: 0;
-        }
-        
-        .cell-id {
-            width: 50px;
-            flex-shrink: 0;
-        }
-        
-        .cell-title {
-            flex-grow: 1;
-            padding-right: 10px;
-        }
-        
-        .cell-tags {
-            width: 120px;
-            flex-shrink: 0;
-            text-align: right;
-        }
-        
-        .post-link {
+        .ascii-table a {
             color: var(--terminal-blue);
             text-decoration: none;
             transition: color 0.3s ease;
         }
         
-        .post-link:hover {
+        .ascii-table a:hover {
             color: var(--terminal-cyan);
             text-decoration: underline;
-        }
-        
-        .post-tag {
-            display: inline-block;
-            background-color: rgba(97, 175, 239, 0.1);
-            color: var(--terminal-cyan);
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 0.8rem;
-            margin-right: 5px;
         }
         
         /* Stats section */
@@ -357,22 +297,8 @@
                     </div>
                     
                     <div class="terminal-output">
-                        <!-- ASCII art table with fixed formatting -->
-                        <div class="terminal-table">
-                            <pre class="terminal-table-border" id="table-top-border">┌────────────┬──────┬─────────────────────────────┬───────────────┐</pre>
-                            <div class="terminal-table-row terminal-table-header">
-                                <div class="terminal-table-cell cell-date">DATE</div>
-                                <div class="terminal-table-cell cell-id">ID</div>
-                                <div class="terminal-table-cell cell-title">TITLE</div>
-                                <div class="terminal-table-cell cell-tags">TAGS</div>
-                            </div>
-                            <pre class="terminal-table-border" id="table-header-border">├────────────┼──────┼─────────────────────────────┼───────────────┤</pre>
-                            
-                            <!-- Blog posts will be dynamically inserted here -->
-                            <div id="blog-posts-container"></div>
-                            
-                            <pre class="terminal-table-border" id="table-bottom-border">└────────────┴──────┴─────────────────────────────┴───────────────┘</pre>
-                        </div>
+                        <!-- Pure ASCII table -->
+                        <pre id="ascii-table" class="ascii-table"></pre>
                     </div>
                     
                     <!-- Stats section -->
@@ -407,7 +333,6 @@
                             <h1 id="post-title"></h1>
                             <div class="blog-post-meta">
                                 <span id="post-date"></span>
-                                <span id="post-tags"></span>
                             </div>
                         </div>
                         <div id="post-content"></div>
@@ -443,7 +368,6 @@
                 filename: '2024-04-09-welcome-to-my-blog.md',
                 title: 'Welcome to My Blog',
                 date: '2024-04-09',
-                tags: ['general'],
                 content: `
 # Welcome to My Tech Journey
 
@@ -482,67 +406,199 @@ def simplify_solution(complex_problem):
     return develop_minimal_solution(core_problem)
 \`\`\`
                 `
+            },
+            {
+                id: 2,
+                filename: '2024-05-15-distributed-systems-challenges.md',
+                title: 'Challenges in Distributed Database Systems',
+                date: '2024-05-15',
+                content: `
+# Challenges in Distributed Database Systems
+
+Working on distributed database systems at AWS Redshift has exposed me to numerous interesting challenges. In this post, I'll discuss some of the most common issues and potential solutions.
+
+## The CAP Theorem Trade-offs
+
+The CAP theorem states that a distributed system can only provide two of the following three guarantees:
+
+- **Consistency**: Every read receives the most recent write
+- **Availability**: Every request receives a response
+- **Partition tolerance**: The system continues to operate despite network partitions
+
+Making the right trade-offs depends on your specific use case:
+
+- Banking systems typically prioritize consistency over availability
+- Content delivery systems often choose availability over consistency
+- All distributed systems must handle partition tolerance
+
+## Handling Eventual Consistency
+
+When working with eventually consistent systems, consider these strategies:
+
+1. **Versioning**: Use vector clocks or timestamps to track versions
+2. **Conflict resolution**: Implement merge strategies for conflicting writes
+3. **Read-your-writes consistency**: Ensure users see their own updates immediately
+
+## Performance Optimization Techniques
+
+Some techniques I've found effective:
+
+\`\`\`sql
+-- Example of a query optimization
+SELECT customer_id, SUM(order_total) 
+FROM orders 
+WHERE order_date > '2024-01-01'
+GROUP BY customer_id
+HAVING SUM(order_total) > 1000
+ORDER BY SUM(order_total) DESC
+LIMIT 100;
+\`\`\`
+
+The above query can be optimized by:
+- Adding appropriate indexes
+- Partitioning data by date
+- Pre-aggregating common calculations
+
+I'll dive deeper into each of these topics in future posts.
+                `
+            },
+            {
+                id: 3,
+                filename: '2024-06-01-terminal-ui-design.md',
+                title: 'Creating Effective Terminal-Style UIs',
+                date: '2024-06-01',
+                content: `
+# Creating Effective Terminal-Style UIs
+
+Terminal-style UIs have seen a resurgence in popularity, especially among developers and tech enthusiasts. In this post, I'll share some insights on creating effective terminal-style interfaces for web applications.
+
+## Why Terminal UIs Are Making a Comeback
+
+There are several reasons for the renewed interest in terminal aesthetics:
+
+1. **Nostalgia**: Many developers have fond memories of text-based interfaces
+2. **Focus on content**: Terminal UIs minimize distractions
+3. **Keyboard-centric**: Power users appreciate keyboard navigation
+4. **Distinctive look**: Stands out in a world of flat and material designs
+
+## Key Design Principles
+
+When designing a terminal-style UI, consider these principles:
+
+- **Monospace fonts**: Use fonts like Fira Code or JetBrains Mono
+- **Limited color palette**: Stick to a few well-chosen colors
+- **Command-based interaction**: Implement familiar terminal commands
+- **Progressive disclosure**: Start simple, reveal complexity as needed
+
+## CSS Techniques
+
+Here's a simple example of CSS for a terminal-style interface:
+
+\`\`\`css
+:root {
+  --terminal-bg: #282c34;
+  --terminal-text: #abb2bf;
+  --terminal-green: #98c379;
+  --terminal-blue: #61afef;
+}
+
+.terminal {
+  background-color: var(--terminal-bg);
+  color: var(--terminal-text);
+  font-family: 'Fira Code', monospace;
+  padding: 20px;
+  border-radius: 6px;
+}
+
+.prompt {
+  color: var(--terminal-green);
+}
+
+.command {
+  color: var(--terminal-blue);
+}
+\`\`\`
+
+## Accessibility Considerations
+
+Terminal UIs can present accessibility challenges. Always ensure:
+
+- Sufficient color contrast
+- Keyboard navigability
+- Screen reader compatibility
+- Resizable text
+
+I hope these tips help you create compelling terminal-style interfaces for your own projects!
+                `
             }
-            // Add more blog posts here as needed
         ];
         
-        // Function to display blog posts list
-        function displayBlogPosts() {
-            const container = document.getElementById('blog-posts-container');
-            container.innerHTML = '';
+        // Function to generate pure ASCII table
+        function generateAsciiTable() {
+            const tableElement = document.getElementById('ascii-table');
             
+            // Create a plain text table without HTML tags first
+            let plainTable = [];
+            
+            // Add header row
+            plainTable.push(['DATE', 'ID', 'TITLE']);
+            
+            // Add data rows
             blogPosts.forEach((post, index) => {
-                const row = document.createElement('div');
-                row.className = 'terminal-table-row';
-                
-                // Format date
-                const dateCell = document.createElement('div');
-                dateCell.className = 'terminal-table-cell cell-date';
-                dateCell.textContent = post.date;
-                
-                // Format ID
-                const idCell = document.createElement('div');
-                idCell.className = 'terminal-table-cell cell-id';
-                idCell.textContent = `#${String(index + 1).padStart(3, '0')}`;
-                
-                // Format title with link
-                const titleCell = document.createElement('div');
-                titleCell.className = 'terminal-table-cell cell-title';
-                const titleLink = document.createElement('a');
-                titleLink.className = 'post-link';
-                titleLink.textContent = post.title;
-                titleLink.href = 'javascript:void(0)';
-                titleLink.onclick = () => showBlogPost(post.id);
-                titleCell.appendChild(titleLink);
-                
-                // Format tags
-                const tagsCell = document.createElement('div');
-                tagsCell.className = 'terminal-table-cell cell-tags';
-                if (post.tags && post.tags.length > 0) {
-                    const tagSpan = document.createElement('span');
-                    tagSpan.className = 'post-tag';
-                    tagSpan.textContent = post.tags.join(', ');
-                    tagsCell.appendChild(tagSpan);
-                } else {
-                    const tagSpan = document.createElement('span');
-                    tagSpan.className = 'post-tag';
-                    tagSpan.textContent = 'general';
-                    tagsCell.appendChild(tagSpan);
-                }
-                
-                // Add cells to row
-                row.appendChild(dateCell);
-                row.appendChild(idCell);
-                row.appendChild(titleCell);
-                row.appendChild(tagsCell);
-                
-                // Add row to container
-                container.appendChild(row);
+                const id = `#${String(index + 1).padStart(3, '0')}`;
+                const title = post.title;
+                plainTable.push([post.date, id, title]);
             });
             
-            // Update stats
-            document.getElementById('total-posts').textContent = blogPosts.length;
-            document.getElementById('last-updated').textContent = new Date().toISOString().split('T')[0];
+            // Calculate column widths based on content
+            const colWidths = [0, 0, 0];
+            plainTable.forEach(row => {
+                for (let i = 0; i < row.length; i++) {
+                    colWidths[i] = Math.max(colWidths[i], row[i].length);
+                }
+            });
+            
+            // Add some padding
+            colWidths[0] += 2; // DATE
+            colWidths[1] += 2; // ID
+            colWidths[2] += 2; // TITLE
+            
+            // Generate the ASCII table
+            let tableContent = '';
+            
+            // Top border
+            tableContent += '┌' + '─'.repeat(colWidths[0]) + '┬' + '─'.repeat(colWidths[1]) + '┬' + '─'.repeat(colWidths[2]) + '┐\n';
+            
+            // Header row
+            tableContent += '│' + plainTable[0][0].padEnd(colWidths[0]) + 
+                           '│' + plainTable[0][1].padEnd(colWidths[1]) + 
+                           '│' + plainTable[0][2].padEnd(colWidths[2]) + '│\n';
+            
+            // Header-data separator
+            tableContent += '├' + '─'.repeat(colWidths[0]) + '┼' + '─'.repeat(colWidths[1]) + '┼' + '─'.repeat(colWidths[2]) + '┤\n';
+            
+            // Data rows
+            for (let i = 1; i < plainTable.length; i++) {
+                const row = plainTable[i];
+                tableContent += '│' + row[0].padEnd(colWidths[0]) + 
+                               '│' + row[1].padEnd(colWidths[1]) + 
+                               '│';
+                
+                // Add the title with a link
+                const title = row[2];
+                const titleHtml = `<a href="javascript:void(0)" onclick="showBlogPost(${blogPosts[i-1].id})">${title}</a>`;
+                tableContent += titleHtml + ' '.repeat(colWidths[2] - title.length) + '│\n';
+                
+                // Add row divider if not the last row
+                if (i < plainTable.length - 1) {
+                    tableContent += '├' + '─'.repeat(colWidths[0]) + '┼' + '─'.repeat(colWidths[1]) + '┼' + '─'.repeat(colWidths[2]) + '┤\n';
+                }
+            }
+            
+            // Bottom border
+            tableContent += '└' + '─'.repeat(colWidths[0]) + '┴' + '─'.repeat(colWidths[1]) + '┴' + '─'.repeat(colWidths[2]) + '┘';
+            
+            tableElement.innerHTML = tableContent;
         }
         
         // Function to show a specific blog post
@@ -556,23 +612,6 @@ def simplify_solution(complex_problem):
             // Update post details
             document.getElementById('post-title').textContent = post.title;
             document.getElementById('post-date').textContent = `Published: ${post.date}`;
-            
-            // Update tags
-            const tagsElement = document.getElementById('post-tags');
-            tagsElement.innerHTML = '';
-            if (post.tags && post.tags.length > 0) {
-                tagsElement.textContent = ` | Tags: `;
-                post.tags.forEach((tag, index) => {
-                    const tagSpan = document.createElement('span');
-                    tagSpan.className = 'post-tag';
-                    tagSpan.textContent = tag;
-                    tagsElement.appendChild(tagSpan);
-                    
-                    if (index < post.tags.length - 1) {
-                        tagsElement.appendChild(document.createTextNode(' '));
-                    }
-                });
-            }
             
             // Update content with markdown formatting
             const contentElement = document.getElementById('post-content');
@@ -621,7 +660,11 @@ def simplify_solution(complex_problem):
         
         // Initialize the blog
         document.addEventListener('DOMContentLoaded', () => {
-            displayBlogPosts();
+            generateAsciiTable();
+            
+            // Update stats
+            document.getElementById('total-posts').textContent = blogPosts.length;
+            document.getElementById('last-updated').textContent = new Date().toISOString().split('T')[0];
             
             // Optional: Matrix background effect
             const canvas = document.getElementById('matrix-bg');
