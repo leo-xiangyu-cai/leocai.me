@@ -1,52 +1,63 @@
 ---
-layout: null
+layout: default
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page.title }} | Leo Cai</title>
+    <title>{{ page.title }} - Leo Cai</title>
     <meta name="description" content="{{ page.excerpt | strip_html | truncate: 160 }}">
-    <link rel="stylesheet" href="/assets/css/style.css">
-    <link rel="stylesheet" href="/assets/css/blog.css">
+    <link rel="stylesheet" href="/assets/css/terminal.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" href="/icon.webp" type="image/webp">
-    <!-- Open Graph tags for better social sharing -->
-    <meta property="og:title" content="{{ page.title }} | Leo Cai">
-    <meta property="og:description" content="{{ page.excerpt | strip_html | truncate: 160 }}">
-    <meta property="og:image" content="https://leocai.me/icon.webp">
-    <meta property="og:url" content="https://leocai.me{{ page.url }}">
 </head>
 <body>
-    <nav class="nav">
-        <div class="nav-container">
-            <a href="/" class="nav-logo">LC</a>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/blog">Blog</a>
+    <div class="terminal-window fullscreen">
+        <div class="terminal-header">
+            <div class="terminal-button terminal-close"></div>
+            <div class="terminal-button terminal-minimize"></div>
+            <div class="terminal-button terminal-maximize"></div>
+            <div class="terminal-title">leo@redshift: ~/blog/{{ page.title | slugify }}</div>
+            <!-- Terminal Tabs -->
+            <div class="terminal-tabs">
+                <a href="/" class="terminal-tab">Home</a>
+                <a href="/blog" class="terminal-tab">Blog</a>
+                <a href="#" class="terminal-tab active">{{ page.title | truncate: 20 }}</a>
             </div>
         </div>
-    </nav>
-
-    <main class="blog-post">
-        <article class="container">
-            <header class="post-header">
-                <h1>{{ page.title }}</h1>
-                <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
-            </header>
-            <div class="post-content">
-                {{ content }}
+        <div class="terminal-body">
+            <div class="terminal-line">
+                <span class="terminal-prompt">leo@redshift</span>
+                <span class="terminal-command">cat {{ page.title | slugify }}.md</span>
             </div>
-        </article>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
+            <div class="terminal-output blog-post-content">
+                <h1>{{ page.title }}</h1>
+                <div class="post-meta">
+                    <span class="post-date">{{ page.date | date: "%Y-%m-%d" }}</span>
+                </div>
+                
+                {{ content }}
+                
+                <div class="post-navigation">
+                    <a href="/blog" class="back-link"><i class="fas fa-arrow-left"></i> Back to all posts</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer now inside terminal -->
+        <div class="terminal-footer">
             <p>&copy; 2024 Leo Cai. All rights reserved.</p>
         </div>
-    </footer>
+    </div>
+
+    <!-- Optional Matrix Background Effect -->
+    <canvas id="matrix-bg" class="matrix-bg"></canvas>
+
+    <!-- JavaScript -->
+    <script src="/assets/js/terminal.js"></script>
 </body>
 </html>
