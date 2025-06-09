@@ -1,0 +1,352 @@
+/* Terminal Theme CSS */
+:root {
+    --terminal-bg: #282c34;
+    --terminal-text: #abb2bf;
+    --terminal-green: #98c379;
+    --terminal-blue: #61afef;
+    --terminal-yellow: #e5c07b;
+    --terminal-red: #e06c75;
+    --terminal-purple: #c678dd;
+    --terminal-cyan: #56b6c2;
+    --terminal-prompt: #98c379;
+    --terminal-cursor: #61afef;
+    --terminal-selection: rgba(97, 175, 239, 0.3);
+    --terminal-comment: #5c6370;
+    --terminal-font: 'Fira Code', 'Cascadia Code', 'Source Code Pro', monospace;
+}
+
+body {
+    background-color: var(--terminal-bg);
+    color: var(--terminal-text);
+    font-family: var(--terminal-font);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Terminal Window */
+.terminal-window {
+    background-color: var(--terminal-bg);
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    margin: 40px auto;
+    overflow: hidden;
+    width: 100%;
+    max-width: 900px;
+}
+
+.terminal-header {
+    background: #21252b;
+    height: 30px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.terminal-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.terminal-close {
+    background-color: #ff5f56;
+}
+
+.terminal-minimize {
+    background-color: #ffbd2e;
+}
+
+.terminal-maximize {
+    background-color: #27c93f;
+}
+
+.terminal-title {
+    color: var(--terminal-comment);
+    font-size: 12px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.terminal-body {
+    padding: 20px;
+    height: calc(100vh - 150px);
+    min-height: 400px;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Terminal Text */
+.terminal-line {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.terminal-prompt {
+    color: var(--terminal-prompt);
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+.terminal-prompt::before {
+    content: "➜";
+    margin-right: 8px;
+}
+
+.terminal-command {
+    color: var(--terminal-text);
+    font-weight: 500;
+}
+
+.terminal-output {
+    width: 100%;
+    padding: 10px 0 20px 25px;
+    white-space: pre-wrap;
+}
+
+/* Typing Animation */
+.typing {
+    border-right: 0.15em solid var(--terminal-cursor);
+    animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: var(--terminal-cursor) }
+}
+
+/* Terminal Sections */
+.terminal-section {
+    margin: 30px 0;
+}
+
+.terminal-section-title {
+    color: var(--terminal-yellow);
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Skills Grid */
+.terminal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.terminal-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    padding: 15px;
+    border-left: 3px solid var(--terminal-blue);
+}
+
+.terminal-card h3 {
+    color: var(--terminal-blue);
+    margin-top: 0;
+    font-size: 1rem;
+}
+
+.terminal-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.terminal-list li {
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.terminal-list li::before {
+    content: ">";
+    position: absolute;
+    left: 0;
+    color: var(--terminal-green);
+}
+
+/* Navigation */
+.terminal-nav {
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.terminal-logo {
+    color: var(--terminal-green);
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+
+.terminal-links {
+    display: flex;
+    gap: 20px;
+}
+
+.terminal-links a {
+    color: var(--terminal-text);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.terminal-links a:hover {
+    color: var(--terminal-blue);
+}
+
+.terminal-links a::before {
+    content: "$";
+    color: var(--terminal-green);
+    margin-right: 5px;
+}
+
+/* Social Links */
+.terminal-social {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.terminal-social a {
+    color: var(--terminal-text);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.terminal-social a:hover {
+    color: var(--terminal-blue);
+}
+
+/* Footer */
+.terminal-footer {
+    text-align: center;
+    padding: 20px 0;
+    color: var(--terminal-comment);
+    font-size: 0.9rem;
+}
+
+/* Languages */
+.terminal-languages {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.terminal-languages span {
+    position: relative;
+    padding-left: 20px;
+}
+
+.terminal-languages span::before {
+    content: ">";
+    position: absolute;
+    left: 0;
+    color: var(--terminal-green);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .terminal-window {
+        margin: 20px auto;
+    }
+    
+    .terminal-body {
+        height: auto;
+        min-height: 300px;
+    }
+    
+    .terminal-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Blinking Cursor */
+.cursor {
+    display: inline-block;
+    width: 10px;
+    height: 20px;
+    background-color: var(--terminal-cursor);
+    animation: blink 1s infinite;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Command Highlighting */
+.command-keyword {
+    color: var(--terminal-purple);
+}
+
+.command-string {
+    color: var(--terminal-green);
+}
+
+.command-number {
+    color: var(--terminal-yellow);
+}
+
+.command-comment {
+    color: var(--terminal-comment);
+    font-style: italic;
+}
+
+.command-function {
+    color: var(--terminal-blue);
+}
+
+/* ASCII Art */
+.ascii-art {
+    color: var(--terminal-blue);
+    font-family: monospace;
+    white-space: pre;
+    line-height: 1.2;
+    margin: 20px 0;
+}
+
+/* Help Text */
+.help-command {
+    color: var(--terminal-yellow);
+    font-weight: bold;
+}
+
+.help-description {
+    color: var(--terminal-text);
+    margin-left: 20px;
+}
+
+/* Matrix Effect (Optional) */
+.matrix-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.05;
+}

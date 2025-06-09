@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leo Cai - Software Engineer</title>
     <meta name="description" content="Leo Cai - Software Engineer at AWS Redshift specializing in database engineering and distributed systems">
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/terminal.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" href="./icon.webp" type="image/webp">
     <!-- Open Graph tags for better social sharing -->
@@ -19,108 +19,161 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="nav">
-        <div class="nav-container">
-            <a href="/" class="nav-logo">LC</a>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/blog">Blog</a>
-            </div>
+    <nav class="terminal-nav container">
+        <a href="/" class="terminal-logo">LC</a>
+        <div class="terminal-links">
+            <a href="/">Home</a>
+            <a href="/blog">Blog</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Leo Cai</h1>
-            <h2>Software Engineer @ AWS Redshift</h2>
-            <p class="motto">Best coding is no coding</p>
-            <div class="social-links">
-                <a href="https://github.com/leo-xiangyu-cai" target="_blank" aria-label="GitHub">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/xiangyu-cai-27b6a4a5/" target="_blank" aria-label="LinkedIn">
-                    <i class="fab fa-linkedin"></i>
-                </a>
+    <!-- Terminal Window -->
+    <div class="terminal-window">
+        <div class="terminal-header">
+            <div class="terminal-button terminal-close"></div>
+            <div class="terminal-button terminal-minimize"></div>
+            <div class="terminal-button terminal-maximize"></div>
+            <div class="terminal-title">leo@redshift: ~/portfolio</div>
+        </div>
+        <div class="terminal-body">
+            <div id="terminal-output">
+                <div class="terminal-line">
+                    <span class="terminal-prompt">leo@redshift</span>
+                    <span class="terminal-command">whoami</span>
+                </div>
+                <div class="terminal-output">
+                    <pre class="ascii-art">
+ _     _____ ___     ____    _    ___ 
+| |   | ____/ _ \   / ___|  / \  |_ _|
+| |   |  _|| | | | | |     / _ \  | | 
+| |___| |__| |_| | | |___ / ___ \ | | 
+|_____|_____\___/   \____/_/   \_\___|
+                                      
+                    </pre>
+                    <p>Software Engineer @ AWS Redshift</p>
+                </div>
+
+                <div class="terminal-line">
+                    <span class="terminal-prompt">leo@redshift</span>
+                    <span class="terminal-command">cat motto.txt</span>
+                </div>
+                <div class="terminal-output">
+                    <p><span class="command-string">"Best coding is no coding"</span></p>
+                </div>
+
+                <div class="terminal-line">
+                    <span class="terminal-prompt">leo@redshift</span>
+                    <span class="terminal-command">ls -la skills/</span>
+                </div>
+                <div class="terminal-output">
+                    <div class="terminal-grid">
+                        <div class="terminal-card">
+                            <h3>Programming Languages</h3>
+                            <ul class="terminal-list">
+                                <li>Java</li>
+                                <li>Kotlin</li>
+                                <li>Python</li>
+                                <li>C#</li>
+                                <li>JavaScript/TypeScript</li>
+                            </ul>
+                        </div>
+
+                        <div class="terminal-card">
+                            <h3>Frontend Development</h3>
+                            <ul class="terminal-list">
+                                <li>Angular</li>
+                                <li>React</li>
+                            </ul>
+                        </div>
+
+                        <div class="terminal-card">
+                            <h3>Backend Development</h3>
+                            <ul class="terminal-list">
+                                <li>Spring</li>
+                                <li>.NET Core</li>
+                                <li>Flask</li>
+                            </ul>
+                        </div>
+
+                        <div class="terminal-card">
+                            <h3>Mobile Development</h3>
+                            <ul class="terminal-list">
+                                <li>Android Jetpack Compose</li>
+                            </ul>
+                        </div>
+
+                        <div class="terminal-card">
+                            <h3>Databases</h3>
+                            <ul class="terminal-list">
+                                <li>PostgreSQL</li>
+                                <li>MongoDB</li>
+                                <li>DynamoDB</li>
+                            </ul>
+                        </div>
+
+                        <div class="terminal-card">
+                            <h3>Cloud Services</h3>
+                            <ul class="terminal-list">
+                                <li>AWS Infrastructure</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="terminal-line">
+                    <span class="terminal-prompt">leo@redshift</span>
+                    <span class="terminal-command">cat languages.txt</span>
+                </div>
+                <div class="terminal-output">
+                    <div class="terminal-languages">
+                        <span>Chinese (Native)</span>
+                        <span>English (Professional)</span>
+                    </div>
+                </div>
+
+                <div class="terminal-line">
+                    <span class="terminal-prompt">leo@redshift</span>
+                    <span class="terminal-command">find / -name "social_links"</span>
+                </div>
+                <div class="terminal-output">
+                    <div class="terminal-social">
+                        <a href="https://github.com/leo-xiangyu-cai" target="_blank" aria-label="GitHub">
+                            <i class="fab fa-github"></i> github.com/leo-xiangyu-cai
+                        </a>
+                        <a href="https://www.linkedin.com/in/xiangyu-cai-27b6a4a5/" target="_blank" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i> linkedin.com/in/xiangyu-cai-27b6a4a5
+                        </a>
+                    </div>
+                </div>
+
+                <div class="terminal-line">
+                    <span class="terminal-prompt">leo@redshift</span>
+                    <span class="terminal-command">echo "Type 'help' for available commands"</span>
+                </div>
+                <div class="terminal-output">
+                    <p>Type 'help' for available commands</p>
+                </div>
+            </div>
+            
+            <div class="terminal-line">
+                <span class="terminal-prompt">leo@redshift</span>
+                <input type="text" id="command-input" class="terminal-command" autocomplete="off" autofocus>
+                <span class="cursor"></span>
             </div>
         </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section class="skills">
-        <div class="container">
-            <h2>Technical Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>Programming Languages</h3>
-                    <ul class="skill-list">
-                        <li>Java</li>
-                        <li>Kotlin</li>
-                        <li>Python</li>
-                        <li>C#</li>
-                        <li>JavaScript/TypeScript</li>
-                    </ul>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Frontend Development</h3>
-                    <ul class="skill-list">
-                        <li>Angular</li>
-                        <li>React</li>
-                    </ul>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Backend Development</h3>
-                    <ul class="skill-list">
-                        <li>Spring</li>
-                        <li>.NET Core</li>
-                        <li>Flask</li>
-                    </ul>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Mobile Development</h3>
-                    <ul class="skill-list">
-                        <li>Android Jetpack Compose</li>
-                    </ul>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Databases</h3>
-                    <ul class="skill-list">
-                        <li>PostgreSQL</li>
-                        <li>MongoDB</li>
-                        <li>DynamoDB</li>
-                    </ul>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Cloud Services</h3>
-                    <ul class="skill-list">
-                        <li>AWS Infrastructure</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Languages Section -->
-    <section class="languages">
-        <div class="container">
-            <h2>Languages</h2>
-            <ul class="language-list">
-                <li>Chinese (Native)</li>
-                <li>English (Professional)</li>
-            </ul>
-        </div>
-    </section>
+    </div>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="terminal-footer">
         <div class="container">
             <p>&copy; 2024 Leo Cai. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Optional Matrix Background Effect -->
+    <canvas id="matrix-bg" class="matrix-bg"></canvas>
+
+    <!-- JavaScript -->
+    <script src="./assets/js/terminal.js"></script>
 </body>
 </html>
