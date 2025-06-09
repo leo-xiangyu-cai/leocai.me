@@ -148,29 +148,40 @@
         }
         
         /* ASCII Table Style */
-        .ascii-table {
+        .terminal-table {
             font-family: var(--terminal-font);
-            white-space: pre;
-            color: var(--terminal-comment);
-            font-size: 14px;
-            margin: 0;
-            padding: 0;
             border-collapse: collapse;
             width: 100%;
+            max-width: 900px;
+            margin: 0;
+            color: var(--terminal-text);
+            font-size: 14px;
         }
         
-        .ascii-table-row {
+        .terminal-table-border {
+            color: var(--terminal-comment);
+            white-space: pre;
+            line-height: 1;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .terminal-table-row {
             display: flex;
             width: 100%;
-            padding: 3px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         
-        .ascii-table-header {
+        .terminal-table-header {
             color: var(--terminal-yellow);
             font-weight: bold;
+            border-bottom: 1px solid var(--terminal-comment);
+            margin-bottom: 5px;
         }
         
-        .ascii-table-cell {
+        .terminal-table-cell {
+            padding: 0 5px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -342,21 +353,25 @@
                 <div id="blog-list-view">
                     <div class="terminal-line">
                         <span class="terminal-prompt">leo@redshift</span>
-                        <span class="terminal-command">ls -la posts/</span>
+                        <span class="terminal-command">ls -la --format=table posts/</span>
                     </div>
                     
                     <div class="terminal-output">
                         <!-- ASCII art table with fixed formatting -->
-                        <div class="ascii-table">
-                            <div class="ascii-table-row ascii-table-header">
-                                <div class="ascii-table-cell cell-date">DATE</div>
-                                <div class="ascii-table-cell cell-id">ID</div>
-                                <div class="ascii-table-cell cell-title">TITLE</div>
-                                <div class="ascii-table-cell cell-tags">TAGS</div>
+                        <div class="terminal-table">
+                            <pre class="terminal-table-border" id="table-top-border">┌────────────┬──────┬─────────────────────────────┬───────────────┐</pre>
+                            <div class="terminal-table-row terminal-table-header">
+                                <div class="terminal-table-cell cell-date">DATE</div>
+                                <div class="terminal-table-cell cell-id">ID</div>
+                                <div class="terminal-table-cell cell-title">TITLE</div>
+                                <div class="terminal-table-cell cell-tags">TAGS</div>
                             </div>
+                            <pre class="terminal-table-border" id="table-header-border">├────────────┼──────┼─────────────────────────────┼───────────────┤</pre>
                             
                             <!-- Blog posts will be dynamically inserted here -->
                             <div id="blog-posts-container"></div>
+                            
+                            <pre class="terminal-table-border" id="table-bottom-border">└────────────┴──────┴─────────────────────────────┴───────────────┘</pre>
                         </div>
                     </div>
                     
@@ -478,21 +493,21 @@ def simplify_solution(complex_problem):
             
             blogPosts.forEach((post, index) => {
                 const row = document.createElement('div');
-                row.className = 'ascii-table-row';
+                row.className = 'terminal-table-row';
                 
                 // Format date
                 const dateCell = document.createElement('div');
-                dateCell.className = 'ascii-table-cell cell-date';
+                dateCell.className = 'terminal-table-cell cell-date';
                 dateCell.textContent = post.date;
                 
                 // Format ID
                 const idCell = document.createElement('div');
-                idCell.className = 'ascii-table-cell cell-id';
+                idCell.className = 'terminal-table-cell cell-id';
                 idCell.textContent = `#${String(index + 1).padStart(3, '0')}`;
                 
                 // Format title with link
                 const titleCell = document.createElement('div');
-                titleCell.className = 'ascii-table-cell cell-title';
+                titleCell.className = 'terminal-table-cell cell-title';
                 const titleLink = document.createElement('a');
                 titleLink.className = 'post-link';
                 titleLink.textContent = post.title;
@@ -502,7 +517,7 @@ def simplify_solution(complex_problem):
                 
                 // Format tags
                 const tagsCell = document.createElement('div');
-                tagsCell.className = 'ascii-table-cell cell-tags';
+                tagsCell.className = 'terminal-table-cell cell-tags';
                 if (post.tags && post.tags.length > 0) {
                     const tagSpan = document.createElement('span');
                     tagSpan.className = 'post-tag';
