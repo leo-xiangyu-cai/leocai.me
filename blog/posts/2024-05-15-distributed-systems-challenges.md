@@ -1,9 +1,3 @@
----
-layout: post
-title: "Challenges in Distributed Database Systems"
-date: 2024-05-15
----
-
 # Challenges in Distributed Database Systems
 
 Working on distributed database systems at AWS Redshift has exposed me to numerous interesting challenges. In this post, I'll discuss some of the most common issues and potential solutions.

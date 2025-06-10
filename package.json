@@ -1,0 +1,12 @@
+{
+  "name": "leocai-website",
+  "version": "1.0.0",
+  "description": "Leo Cai's personal website",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "update-posts": "node blog/generate-posts-list.js"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3"
+  }
+}

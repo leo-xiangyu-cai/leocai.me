@@ -12,142 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" href="../icon.webp" type="image/webp">
     <style>
-        :root {
-            --terminal-bg: #282c34;
-            --terminal-text: #abb2bf;
-            --terminal-green: #98c379;
-            --terminal-blue: #61afef;
-            --terminal-yellow: #e5c07b;
-            --terminal-red: #e06c75;
-            --terminal-purple: #c678dd;
-            --terminal-cyan: #56b6c2;
-            --terminal-prompt: #98c379;
-            --terminal-cursor: #61afef;
-            --terminal-selection: rgba(97, 175, 239, 0.3);
-            --terminal-comment: #5c6370;
-            --terminal-font: 'Fira Code', monospace;
-        }
-        
-        body, html {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: var(--terminal-bg);
-            color: var(--terminal-text);
-            font-family: var(--terminal-font);
-            line-height: 1.2;
-        }
-        
-        /* Terminal Window */
-        .terminal-window {
-            background-color: var(--terminal-bg);
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .terminal-header {
-            background: #21252b;
-            height: 30px;
-            padding: 0 8px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            position: relative;
-        }
-        
-        .terminal-button {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        
-        .terminal-close {
-            background-color: #ff5f56;
-        }
-        
-        .terminal-minimize {
-            background-color: #ffbd2e;
-        }
-        
-        .terminal-maximize {
-            background-color: #27c93f;
-        }
-        
-        .terminal-title {
-            color: var(--terminal-comment);
-            font-size: 12px;
-            margin-left: 15px;
-            margin-right: 20px;
-        }
-        
-        .terminal-tabs {
-            display: flex;
-            margin-left: 20px;
-        }
-        
-        .terminal-tab {
-            color: var(--terminal-comment);
-            text-decoration: none;
-            padding: 0 15px;
-            font-size: 14px;
-            line-height: 30px;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-        
-        .terminal-tab:hover {
-            color: var(--terminal-text);
-        }
-        
-        .terminal-tab.active {
-            color: var(--terminal-blue);
-            border-bottom-color: var(--terminal-blue);
-        }
-        
-        .terminal-body {
-            padding: 10px;
-            flex: 1;
-            height: auto;
-            overflow-y: auto;
-            position: relative;
-        }
-        
-        .terminal-line {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-wrap: wrap;
-            position: relative;
-            margin-bottom: 10px;
-        }
-        
-        .terminal-prompt {
-            color: var(--terminal-prompt);
-            margin-right: 10px;
-            white-space: nowrap;
-        }
-        
-        .terminal-prompt::before {
-            content: "➜";
-            margin-right: 8px;
-        }
-        
-        .terminal-command {
-            color: var(--terminal-text);
-            font-weight: 500;
-        }
-        
-        .terminal-output {
-            width: 100%;
-            padding: 5px 0 10px 15px;
-            white-space: pre-wrap;
-        }
-        
-        /* Pure ASCII Table Style */
+        /* Blog specific styles */
         .ascii-table {
             font-family: 'Fira Code', monospace;
             white-space: pre;
@@ -197,16 +62,6 @@
             font-weight: bold;
         }
         
-        /* Footer */
-        .terminal-footer {
-            background-color: var(--terminal-bg);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 20px;
-            text-align: center;
-            color: var(--terminal-comment);
-            font-size: 0.9rem;
-        }
-        
         /* Loading indicator */
         .loading {
             color: var(--terminal-yellow);
@@ -222,22 +77,11 @@
             background-color: rgba(224, 108, 117, 0.1);
             border-radius: 4px;
         }
-        
-        /* Matrix Effect (Optional) */
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.05;
-        }
     </style>
 </head>
 <body>
     <!-- Terminal Window -->
-    <div class="terminal-window">
+    <div class="terminal-window fullscreen">
         <div class="terminal-header">
             <div class="terminal-button terminal-close"></div>
             <div class="terminal-button terminal-minimize"></div>
@@ -255,7 +99,7 @@
                 <div id="blog-list-view">
                     <div class="terminal-line">
                         <span class="terminal-prompt">leo@redshift</span>
-                        <span class="terminal-command">ls -la --format=table _posts/</span>
+                        <span class="terminal-command">ls -la --format=table blog/posts/</span>
                     </div>
                     
                     <div class="terminal-output">
@@ -303,79 +147,32 @@
     <canvas id="matrix-bg" class="matrix-bg"></canvas>
 
     <!-- JavaScript -->
+    <script src="../assets/js/matrix.js"></script>
     <script>
-        // Function to fetch and parse blog posts from _posts directory
+        // Function to fetch and parse blog posts
         async function fetchBlogPosts() {
             try {
-                // Show loading indicator
-                document.getElementById('loading-indicator').style.display = 'block';
-                document.getElementById('ascii-table').style.display = 'none';
-                document.getElementById('error-message').style.display = 'none';
-                
-                // Fetch the list of files in the _posts directory
-                const response = await fetch('/_posts/');
-                
+                // Fetch the list of blog post files
+                const response = await fetch('/blog/posts-list.json');
                 if (!response.ok) {
-                    throw new Error('Failed to fetch blog posts');
+                    throw new Error('Failed to fetch blog posts list');
                 }
                 
-                const html = await response.text();
+                const blogPosts = await response.json();
                 
-                // Parse the HTML to extract file names
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const links = Array.from(doc.querySelectorAll('a'));
-                
-                // Filter for markdown files
-                const mdFiles = links
-                    .map(link => link.getAttribute('href'))
-                    .filter(href => href && href.endsWith('.md'))
-                    .map(href => href);
-                
-                // Parse each file name to extract date and title
-                const blogPosts = mdFiles.map(filename => {
-                    // Extract date and title from filename (format: YYYY-MM-DD-title.md)
-                    const match = filename.match(/^(\d{4}-\d{2}-\d{2})-(.+)\.md$/);
-                    
-                    if (match) {
-                        const date = match[1];
-                        const title = match[2].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                        
-                        return {
-                            filename,
-                            date,
-                            title,
-                            url: `/blog/${filename.replace('.md', '')}`
-                        };
-                    }
-                    
-                    return null;
-                }).filter(post => post !== null);
-                
-                // Sort by date (newest first)
+                // Sort posts by date (newest first)
                 blogPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
                 
-                // Generate the ASCII table
-                generateAsciiTable(blogPosts);
-                
-                // Update stats
-                document.getElementById('total-posts').textContent = blogPosts.length;
-                document.getElementById('last-updated').textContent = new Date().toISOString().split('T')[0];
-                
-                // Hide loading indicator, show table
-                document.getElementById('loading-indicator').style.display = 'none';
-                document.getElementById('ascii-table').style.display = 'block';
-                
+                return blogPosts;
             } catch (error) {
                 console.error('Error fetching blog posts:', error);
-                
-                // Show error message
                 document.getElementById('loading-indicator').style.display = 'none';
                 document.getElementById('error-message').style.display = 'block';
-                document.getElementById('error-message').textContent = 'Error loading blog posts: ' + error.message;
+                document.getElementById('error-message').textContent = `Error loading blog posts: ${error.message}`;
+                return [];
             }
         }
-        
+
         // Function to generate pure ASCII table
         function generateAsciiTable(blogPosts) {
             const tableElement = document.getElementById('ascii-table');
@@ -430,7 +227,7 @@
                 // Add the title with a link to the individual blog post page
                 const title = row[2];
                 const post = blogPosts[i-1];
-                const postUrl = `/blog/post.html?post=${post.filename.replace('.md', '')}`;
+                const postUrl = post.url;
                 const titleHtml = `<a href="${postUrl}" class="post-link">${title}</a>`;
                 tableContent += titleHtml + ' '.repeat(colWidths[2] - title.length) + '│\n';
                 
@@ -447,46 +244,26 @@
         }
         
         // Initialize the blog
-        document.addEventListener('DOMContentLoaded', () => {
-            // Fetch blog posts
-            fetchBlogPosts();
-            
-            // Optional: Matrix background effect
-            const canvas = document.getElementById('matrix-bg');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            const fontSize = 10;
-            const columns = canvas.width / fontSize;
-            
-            const drops = [];
-            for (let i = 0; i < columns; i++) {
-                drops[i] = 1;
-            }
-            
-            function drawMatrix() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Fetch blog posts
+                const blogPosts = await fetchBlogPosts();
                 
-                ctx.fillStyle = '#0F0';
-                ctx.font = fontSize + 'px monospace';
+                // Hide loading indicator, show table
+                document.getElementById('loading-indicator').style.display = 'none';
+                document.getElementById('ascii-table').style.display = 'block';
                 
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    
-                    drops[i]++;
-                }
+                // Generate the ASCII table
+                generateAsciiTable(blogPosts);
+                
+                // Update stats
+                document.getElementById('total-posts').textContent = blogPosts.length;
+                document.getElementById('last-updated').textContent = new Date().toISOString().split('T')[0];
+            } catch (error) {
+                console.error('Error initializing blog:', error);
+                document.getElementById('loading-indicator').style.display = 'none';
+                document.getElementById('error-message').style.display = 'block';
             }
-            
-            setInterval(drawMatrix, 50);
         });
     </script>
 </body>

@@ -1,9 +1,3 @@
----
-layout: post
-title: "Welcome to My Blog"
-date: 2024-04-09
----
-
 # Welcome to My Tech Journey
 
 As a Software Engineer at AWS Redshift, I often encounter interesting technical challenges and solutions. This blog will be a space where I share insights about:
@@ -39,4 +33,4 @@ def simplify_solution(complex_problem):
         return use_existing_solution(core_problem)
         
     return develop_minimal_solution(core_problem)
-
+```

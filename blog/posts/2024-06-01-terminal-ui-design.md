@@ -1,9 +1,3 @@
----
-layout: post
-title: "Creating Effective Terminal-Style UIs"
-date: 2024-06-01
----
-
 # Creating Effective Terminal-Style UIs
 
 Terminal-style UIs have seen a resurgence in popularity, especially among developers and tech enthusiasts. In this post, I'll share some insights on creating effective terminal-style interfaces for web applications.

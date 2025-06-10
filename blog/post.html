@@ -12,151 +12,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" href="../icon.webp" type="image/webp">
     <style>
-        :root {
-            --terminal-bg: #282c34;
-            --terminal-text: #abb2bf;
-            --terminal-green: #98c379;
-            --terminal-blue: #61afef;
-            --terminal-yellow: #e5c07b;
-            --terminal-red: #e06c75;
-            --terminal-purple: #c678dd;
-            --terminal-cyan: #56b6c2;
-            --terminal-prompt: #98c379;
-            --terminal-cursor: #61afef;
-            --terminal-selection: rgba(97, 175, 239, 0.3);
-            --terminal-comment: #5c6370;
-            --terminal-font: 'Fira Code', monospace;
-        }
-        
-        body, html {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: var(--terminal-bg);
-            color: var(--terminal-text);
-            font-family: var(--terminal-font);
-            line-height: 1.2;
-        }
-        
-        /* Terminal Window */
-        .terminal-window {
-            background-color: var(--terminal-bg);
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .terminal-header {
-            background: #21252b;
-            height: 30px;
-            padding: 0 8px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            position: relative;
-        }
-        
-        .terminal-button {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        
-        .terminal-close {
-            background-color: #ff5f56;
-        }
-        
-        .terminal-minimize {
-            background-color: #ffbd2e;
-        }
-        
-        .terminal-maximize {
-            background-color: #27c93f;
-        }
-        
-        .terminal-title {
-            color: var(--terminal-comment);
-            font-size: 12px;
-            margin-left: 15px;
-            margin-right: 20px;
-        }
-        
-        .terminal-tabs {
-            display: flex;
-            margin-left: 20px;
-        }
-        
-        .terminal-tab {
-            color: var(--terminal-comment);
-            text-decoration: none;
-            padding: 0 15px;
-            font-size: 14px;
-            line-height: 30px;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-        
-        .terminal-tab:hover {
-            color: var(--terminal-text);
-        }
-        
-        .terminal-tab.active {
-            color: var(--terminal-blue);
-            border-bottom-color: var(--terminal-blue);
-        }
-        
-        .terminal-body {
-            padding: 10px;
-            flex: 1;
-            height: auto;
-            overflow-y: auto;
-            position: relative;
-        }
-        
-        .terminal-line {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-wrap: wrap;
-            position: relative;
-            margin-bottom: 10px;
-        }
-        
-        .terminal-prompt {
-            color: var(--terminal-prompt);
-            margin-right: 10px;
-            white-space: nowrap;
-        }
-        
-        .terminal-prompt::before {
-            content: "➜";
-            margin-right: 8px;
-        }
-        
-        .terminal-command {
-            color: var(--terminal-text);
-            font-weight: 500;
-        }
-        
-        .terminal-output {
-            width: 100%;
-            padding: 5px 0 10px 15px;
-            white-space: pre-wrap;
-        }
-        
-        /* Footer */
-        .terminal-footer {
-            background-color: var(--terminal-bg);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 20px;
-            text-align: center;
-            color: var(--terminal-comment);
-            font-size: 0.9rem;
-        }
-        
         /* Blog post content */
         .blog-post-content {
             padding: 10px;
@@ -209,17 +64,6 @@
             text-decoration: underline;
         }
         
-        /* Matrix Effect (Optional) */
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.05;
-        }
-        
         /* Blog content */
         .blog-content {
             line-height: 1.6;
@@ -261,7 +105,7 @@
 </head>
 <body>
     <!-- Terminal Window -->
-    <div class="terminal-window">
+    <div class="terminal-window fullscreen">
         <div class="terminal-header">
             <div class="terminal-button terminal-close"></div>
             <div class="terminal-button terminal-minimize"></div>
@@ -278,7 +122,7 @@
             <div id="terminal-output">
                 <div class="terminal-line">
                     <span class="terminal-prompt">leo@redshift</span>
-                    <span class="terminal-command" id="cat-command">cat _posts/post.md</span>
+                    <span class="terminal-command" id="cat-command">cat blog/posts/post.md</span>
                 </div>
                 
                 <div class="terminal-output blog-post-content">
@@ -324,6 +168,8 @@
     <canvas id="matrix-bg" class="matrix-bg"></canvas>
 
     <!-- JavaScript -->
+    <script src="../assets/js/matrix.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         // Function to get URL parameters
         function getUrlParameter(name) {
@@ -333,68 +179,25 @@
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
         
-        // Function to extract post metadata from front matter
-        function extractFrontMatter(content) {
-            const frontMatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
-            const match = content.match(frontMatterRegex);
-            
-            if (match) {
-                const frontMatter = match[1];
-                const contentWithoutFrontMatter = content.replace(frontMatterRegex, '');
+        // Function to fetch blog posts list
+        async function fetchBlogPostsList() {
+            try {
+                const response = await fetch('/blog/posts-list.json');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch blog posts list');
+                }
                 
-                // Parse front matter
-                const metadata = {};
-                const lines = frontMatter.split('\n');
-                
-                lines.forEach(line => {
-                    const parts = line.split(':');
-                    if (parts.length >= 2) {
-                        const key = parts[0].trim();
-                        const value = parts.slice(1).join(':').trim();
-                        metadata[key] = value.replace(/^"(.*)"$/, '$1'); // Remove quotes if present
-                    }
-                });
-                
-                return {
-                    metadata,
-                    content: contentWithoutFrontMatter
-                };
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching blog posts list:', error);
+                return [];
             }
-            
-            return {
-                metadata: {},
-                content
-            };
         }
         
-        // Simple markdown formatter
-        function formatMarkdown(markdown) {
-            if (!markdown) return '';
-            
-            // Replace headers
-            let formatted = markdown
-                .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-                .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-                .replace(/^#### (.*$)/gm, '<h4>$1</h4>');
-            
-            // Replace lists
-            formatted = formatted.replace(/^\s*-\s*(.*$)/gm, '<li>$1</li>');
-            formatted = formatted.replace(/(<li>.*<\/li>\n)+/g, '<ul>$&</ul>');
-            
-            // Replace code blocks
-            formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-            
-            // Replace inline code
-            formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
-            
-            // Replace paragraphs
-            formatted = formatted.replace(/^(?!<[hou]).+$/gm, '<p>$&</p>');
-            
-            // Fix empty lines
-            formatted = formatted.replace(/<p><\/p>/g, '');
-            
-            return formatted;
+        // Function to find post by ID
+        function findPostById(posts, postId) {
+            return posts.find(post => post.filename.replace('.md', '') === postId || 
+                              post.url.includes(postId));
         }
         
         // Function to load blog post
@@ -406,17 +209,27 @@
             
             try {
                 // Get post filename from URL parameter
-                const postFilename = getUrlParameter('post');
+                const postId = getUrlParameter('post');
                 
-                if (!postFilename) {
-                    throw new Error('No post specified. Please provide a post parameter.');
+                if (!postId) {
+                    throw new Error('Post ID not specified. Please check the URL.');
+                }
+                
+                // Fetch the posts list
+                const blogPosts = await fetchBlogPostsList();
+                
+                // Find the post in the list
+                const post = findPostById(blogPosts, postId);
+                
+                if (!post) {
+                    throw new Error(`Post not found: ${postId}`);
                 }
                 
                 // Update the command display
-                document.getElementById('cat-command').textContent = `cat _posts/${postFilename}.md`;
+                document.getElementById('cat-command').textContent = `cat blog/posts/${post.filename}`;
                 
                 // Fetch the post content
-                const response = await fetch(`/_posts/${postFilename}.md`);
+                const response = await fetch(`/blog/posts/${post.filename}`);
                 
                 if (!response.ok) {
                     throw new Error(`Failed to load post: ${response.status} ${response.statusText}`);
@@ -424,21 +237,18 @@
                 
                 const content = await response.text();
                 
-                // Extract front matter and content
-                const { metadata, content: postContent } = extractFrontMatter(content);
-                
                 // Update page title
-                document.title = metadata.title ? `${metadata.title} - Leo Cai` : 'Blog Post - Leo Cai';
+                document.title = `${post.title} - Leo Cai`;
                 
                 // Update tab title
-                document.getElementById('post-tab').textContent = metadata.title || 'Post';
+                document.getElementById('post-tab').textContent = post.title;
                 
                 // Update post details
-                document.getElementById('post-title').textContent = metadata.title || 'Untitled Post';
-                document.getElementById('post-date').textContent = metadata.date || 'Unknown Date';
+                document.getElementById('post-title').textContent = post.title;
+                document.getElementById('post-date').textContent = post.date;
                 
-                // Update content with markdown formatting
-                document.getElementById('post-content').innerHTML = formatMarkdown(postContent);
+                // Update content with markdown formatting using marked.js
+                document.getElementById('post-content').innerHTML = marked.parse(content);
                 
                 // Hide loading indicator, show post
                 document.getElementById('loading-indicator').style.display = 'none';
@@ -458,43 +268,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Load blog post
             loadBlogPost();
-            
-            // Optional: Matrix background effect
-            const canvas = document.getElementById('matrix-bg');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            const fontSize = 10;
-            const columns = canvas.width / fontSize;
-            
-            const drops = [];
-            for (let i = 0; i < columns; i++) {
-                drops[i] = 1;
-            }
-            
-            function drawMatrix() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#0F0';
-                ctx.font = fontSize + 'px monospace';
-                
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    
-                    drops[i]++;
-                }
-            }
-            
-            setInterval(drawMatrix, 50);
         });
     </script>
 </body>
