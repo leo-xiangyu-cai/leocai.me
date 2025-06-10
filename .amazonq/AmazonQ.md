@@ -1,183 +1,71 @@
-# leocai.me - Personal Website Project
+# Leo Cai's Personal Website
 
-## Project Overview
-
-This is a personal website for Leo Cai, a Software Engineer at AWS Redshift. The website features a terminal-themed homepage and a blog section. The site is built as a static website using Jekyll for the blog functionality, with custom HTML, CSS, and JavaScript for the terminal interface.
+This is a personal website and blog for Leo Cai, a Software Engineer at AWS Redshift. The site features a terminal-style UI and a blog section with markdown-based posts.
 
 ## Project Structure
 
-```
-leocai.me/
-├── _config.yml              # Jekyll configuration
-├── _layouts/                # Jekyll layouts
-│   └── post.html            # Blog post layout template
-├── _posts/                  # Blog posts in Markdown format
-│   └── 2024-04-09-welcome-to-my-blog.md
-├── assets/                  # Static assets
-│   ├── css/                 # CSS stylesheets
-│   │   ├── blog.css         # Blog-specific styles
-│   │   ├── style.css        # Original site styles
-│   │   └── terminal.css     # Terminal theme styles
-│   └── js/                  # JavaScript files
-│       ├── matrix.js        # Matrix background effect
-│       └── terminal.js      # Terminal functionality
-├── blog/                    # Blog section
-│   └── index.html           # Blog listing page
-├── CNAME                    # Custom domain configuration
-├── icon.webp                # Site favicon
-└── index.html               # Homepage with terminal interface
-```
+- `/assets/` - CSS, JavaScript, and other static assets
+  - `/assets/css/` - CSS stylesheets including terminal.css
+  - `/assets/js/` - JavaScript files including matrix.js for background effects
+- `/blog/` - Blog section of the website
+  - `/blog/posts/` - Markdown files for individual blog posts
+  - `/blog/index.html` - Blog listing page
+  - `/blog/post.html` - Individual blog post template
+- `/index.html` - Main landing page
 
-## Key Components
+## Technology Stack
 
-### 1. Terminal Interface (Homepage)
+- **Frontend**: HTML, CSS, JavaScript (vanilla)
+- **Styling**: Custom terminal-style UI
+- **Blog**: Static markdown files with client-side rendering
+- **Deployment**: AWS Amplify
 
-The homepage features an interactive terminal interface with:
-- Command input functionality
-- Command history navigation
-- Multiple commands (`help`, `about`, `skills`, etc.)
-- ASCII art and visual effects
-- Skills display in terminal-style cards
+## Blog System
 
-**Key files:**
-- `index.html` - Main terminal interface
-- `assets/css/terminal.css` - Terminal styling
-- `assets/js/terminal.js` - Terminal functionality
-- `assets/js/matrix.js` - Matrix background effect
+The blog system uses a static approach:
 
-### 2. Blog System
+1. Blog posts are written as markdown files in `/blog/posts/`
+2. Post metadata is hardcoded in the JavaScript files
+3. The post.html page uses marked.js to render markdown content
+4. No build step is required - everything is client-side
 
-The blog section uses Jekyll to:
-- Generate blog post pages from Markdown files
-- Create a listing page of all posts
-- Apply consistent styling across posts
+## File Naming Conventions
 
-**Key files:**
-- `_config.yml` - Jekyll configuration
-- `_layouts/post.html` - Blog post template
-- `blog/index.html` - Blog listing page
-- `assets/css/blog.css` - Blog styling
+- Blog posts: `YYYY-MM-DD-title-slug.md`
+- CSS files: `name.css`
+- JavaScript files: `name.js`
 
 ## Development Workflow
 
-### Local Development
-
-1. **Preview with Python HTTP Server:**
-   ```bash
-   cd /Users/caixy/Leo/workspace/leocai.me
-   python3 -m http.server 8000
-   ```
-   Then visit http://localhost:8000
-
-2. **Jekyll Limitations:**
-   - The Python server doesn't process Jekyll templates
-   - Blog post listing won't work locally with this method
-   - Individual pages with Jekyll front matter won't render properly
-
-### Deployment
-
-The site is deployed using GitHub Pages:
-
-1. **Commit and push changes:**
-   ```bash
-   git add .
-   git commit -m "Description of changes"
-   git push
-   ```
-
-2. **GitHub Pages Processing:**
-   - GitHub Pages automatically processes Jekyll templates
-   - Changes typically deploy within a few minutes
-   - The site is accessible at https://leocai.me
+1. Edit HTML/CSS/JS files directly
+2. Add new blog posts as markdown files in `/blog/posts/`
+3. Update the blog post arrays in `blog/index.html` and `blog/post.html`
+4. Commit and push to GitHub
+5. AWS Amplify automatically deploys the changes
 
 ## Common Tasks
 
 ### Adding a New Blog Post
 
-1. Create a new Markdown file in the `_posts` directory with the naming format: `YYYY-MM-DD-title.md`
-2. Add Jekyll front matter at the top:
-   ```yaml
-   ---
-   layout: post
-   title: "Your Post Title"
-   date: YYYY-MM-DD
-   ---
-   ```
-3. Write your content in Markdown format
-4. Commit and push to deploy
+1. Create a new markdown file in `/blog/posts/` with the format `YYYY-MM-DD-title-slug.md`
+2. Add the post metadata to the `blogPosts` array in `blog/index.html`
+3. Add the post metadata to the `blogPosts` object in `blog/post.html`
+4. Commit and push the changes
 
-### Modifying the Terminal Interface
+### Updating Styles
 
-1. Edit `index.html` for structure changes
-2. Modify `assets/css/terminal.css` for styling
-3. Update `assets/js/terminal.js` for functionality changes
-4. Add new commands by extending the `processCommand()` function
+1. Edit the appropriate CSS file in `/assets/css/`
+2. Test locally to ensure changes look correct
+3. Commit and push the changes
 
-### Styling Changes
+### Deployment
 
-- `terminal.css` - Terminal theme styling
-- `blog.css` - Blog-specific styling
-- `style.css` - Original site styling (mostly superseded by terminal.css)
+The site is deployed using AWS Amplify, which automatically builds and deploys the site when changes are pushed to the main branch.
 
 ## Best Practices
 
-1. **Local Testing:**
-   - Always preview changes locally before pushing
-   - For blog changes, be aware that Jekyll features won't work in local preview
-
-2. **Responsive Design:**
-   - Test on multiple screen sizes
-   - Terminal interface is designed to be responsive
-
-3. **Performance:**
-   - Keep JavaScript minimal and efficient
-   - Optimize images (using WebP format)
-   - Minimize external dependencies
-
-4. **SEO:**
-   - Maintain proper meta tags and descriptions
-   - Use semantic HTML elements
-   - Include Open Graph tags for social sharing
-
-## Future Enhancements
-
-Potential improvements to consider:
-
-1. **Local Jekyll Preview:**
-   - Set up a local Jekyll environment for complete testing
-
-2. **Additional Terminal Commands:**
-   - Add more interactive commands
-   - Create a projects showcase command
-
-3. **Blog Enhancements:**
-   - Add categories and tags
-   - Implement a search function
-   - Add related posts section
-
-4. **Performance Optimization:**
-   - Implement lazy loading for images
-   - Add service worker for offline capabilities
-
-5. **Analytics:**
-   - Add privacy-friendly analytics
-
-## Troubleshooting
-
-### Blog Post Not Appearing
-
-- Ensure the post file follows the correct naming convention
-- Verify the front matter is formatted correctly
-- Check that the post date is not in the future
-
-### Terminal Commands Not Working
-
-- Check the browser console for JavaScript errors
-- Verify that the command is registered in the `processCommand()` function
-- Ensure event listeners are properly attached
-
-### Styling Issues
-
-- Use browser developer tools to inspect elements
-- Check for CSS specificity conflicts
-- Verify media queries for responsive design issues
+- Keep the terminal UI aesthetic consistent across all pages
+- Ensure all pages are responsive and work on mobile devices
+- Maintain the dark theme with appropriate contrast for readability
+- Use relative paths for all assets and links
+- Keep JavaScript minimal and focused on enhancing the terminal experience
