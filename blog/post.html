@@ -114,6 +114,31 @@
             font-size: 14px;
         }
         
+        /* Table styling */
+        .blog-content table {
+            border-collapse: collapse;
+            margin: 1em 0;
+            width: 100%;
+            font-size: 0.9em;
+        }
+        
+        .blog-content th,
+        .blog-content td {
+            border: 1px solid var(--terminal-comment);
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        .blog-content th {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--terminal-blue);
+            font-weight: 600;
+        }
+        
+        .blog-content tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+        
         /* Loading indicator */
         .loading {
             color: var(--terminal-yellow);
