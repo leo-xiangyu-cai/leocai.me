@@ -149,29 +149,33 @@
     <!-- JavaScript -->
     <script src="../assets/js/matrix.js"></script>
     <script>
-        // Function to fetch and parse blog posts
-        async function fetchBlogPosts() {
-            try {
-                // Fetch the list of blog post files
-                const response = await fetch('/blog/posts-list.json');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch blog posts list');
-                }
-                
-                const blogPosts = await response.json();
-                
-                // Sort posts by date (newest first)
-                blogPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                return blogPosts;
-            } catch (error) {
-                console.error('Error fetching blog posts:', error);
-                document.getElementById('loading-indicator').style.display = 'none';
-                document.getElementById('error-message').style.display = 'block';
-                document.getElementById('error-message').textContent = `Error loading blog posts: ${error.message}`;
-                return [];
+        // Blog posts data - hardcoded for static deployment
+        const blogPosts = [
+            {
+                filename: '2024-06-01-terminal-ui-design.md',
+                date: '2024-06-01',
+                title: 'Creating Effective Terminal-Style UIs',
+                url: '/blog/post.html?post=2024-06-01-terminal-ui-design'
+            },
+            {
+                filename: '2024-06-01-FixMaster-Plan.md',
+                date: '2024-06-01',
+                title: 'FixMaster Plan',
+                url: '/blog/post.html?post=2024-06-01-FixMaster-Plan'
+            },
+            {
+                filename: '2024-05-15-distributed-systems-challenges.md',
+                date: '2024-05-15',
+                title: 'Challenges in Distributed Database Systems',
+                url: '/blog/post.html?post=2024-05-15-distributed-systems-challenges'
+            },
+            {
+                filename: '2024-04-09-welcome-to-my-blog.md',
+                date: '2024-04-09',
+                title: 'Welcome to My Blog',
+                url: '/blog/post.html?post=2024-04-09-welcome-to-my-blog'
             }
-        }
+        ];
 
         // Function to generate pure ASCII table
         function generateAsciiTable(blogPosts) {
@@ -244,11 +248,8 @@
         }
         
         // Initialize the blog
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', () => {
             try {
-                // Fetch blog posts
-                const blogPosts = await fetchBlogPosts();
-                
                 // Hide loading indicator, show table
                 document.getElementById('loading-indicator').style.display = 'none';
                 document.getElementById('ascii-table').style.display = 'block';

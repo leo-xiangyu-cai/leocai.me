@@ -179,26 +179,29 @@
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
         
-        // Function to fetch blog posts list
-        async function fetchBlogPostsList() {
-            try {
-                const response = await fetch('/blog/posts-list.json');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch blog posts list');
-                }
-                
-                return await response.json();
-            } catch (error) {
-                console.error('Error fetching blog posts list:', error);
-                return [];
+        // Blog posts data - hardcoded for static deployment
+        const blogPosts = {
+            '2024-06-01-terminal-ui-design': {
+                title: 'Creating Effective Terminal-Style UIs',
+                date: '2024-06-01',
+                path: './posts/2024-06-01-terminal-ui-design.md'
+            },
+            '2024-06-01-FixMaster-Plan': {
+                title: 'FixMaster Plan',
+                date: '2024-06-01',
+                path: './posts/2024-06-01-FixMaster-Plan.md'
+            },
+            '2024-05-15-distributed-systems-challenges': {
+                title: 'Challenges in Distributed Database Systems',
+                date: '2024-05-15',
+                path: './posts/2024-05-15-distributed-systems-challenges.md'
+            },
+            '2024-04-09-welcome-to-my-blog': {
+                title: 'Welcome to My Blog',
+                date: '2024-04-09',
+                path: './posts/2024-04-09-welcome-to-my-blog.md'
             }
-        }
-        
-        // Function to find post by ID
-        function findPostById(posts, postId) {
-            return posts.find(post => post.filename.replace('.md', '') === postId || 
-                              post.url.includes(postId));
-        }
+        };
         
         // Function to load blog post
         async function loadBlogPost() {
@@ -211,25 +214,17 @@
                 // Get post filename from URL parameter
                 const postId = getUrlParameter('post');
                 
-                if (!postId) {
-                    throw new Error('Post ID not specified. Please check the URL.');
+                if (!postId || !blogPosts[postId]) {
+                    throw new Error('Post not found. Please check the URL.');
                 }
                 
-                // Fetch the posts list
-                const blogPosts = await fetchBlogPostsList();
-                
-                // Find the post in the list
-                const post = findPostById(blogPosts, postId);
-                
-                if (!post) {
-                    throw new Error(`Post not found: ${postId}`);
-                }
+                const post = blogPosts[postId];
                 
                 // Update the command display
-                document.getElementById('cat-command').textContent = `cat blog/posts/${post.filename}`;
+                document.getElementById('cat-command').textContent = `cat ${post.path}`;
                 
                 // Fetch the post content
-                const response = await fetch(`/blog/posts/${post.filename}`);
+                const response = await fetch(post.path);
                 
                 if (!response.ok) {
                     throw new Error(`Failed to load post: ${response.status} ${response.statusText}`);
