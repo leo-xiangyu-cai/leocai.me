@@ -15,12 +15,12 @@
         /* Blog specific styles */
         .ascii-table {
             font-family: 'Fira Code', monospace;
-            white-space: pre;
-            color: var(--terminal-comment);
+            color: var(--terminal-text);
             font-size: 14px;
             line-height: 1.5;
             margin: 0;
             padding: 0;
+            white-space: pre;
         }
         
         .ascii-table a {
@@ -30,6 +30,24 @@
         }
         
         .ascii-table a:hover {
+            color: var(--terminal-cyan);
+            text-decoration: underline;
+        }
+        
+        /* Tree view styles */
+        .tree-view {
+            font-family: 'Fira Code', monospace;
+            color: var(--terminal-text);
+            line-height: 1.5;
+        }
+        
+        .tree-view a {
+            color: var(--terminal-blue);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .tree-view a:hover {
             color: var(--terminal-cyan);
             text-decoration: underline;
         }
@@ -99,7 +117,7 @@
                 <div id="blog-list-view">
                     <div class="terminal-line">
                         <span class="terminal-prompt">leo@redshift</span>
-                        <span class="terminal-command">ls -la --format=table blog/posts/</span>
+                        <span class="terminal-command">find blog/posts -type f | sort</span>
                     </div>
                     
                     <div class="terminal-output">
@@ -155,107 +173,126 @@
                 filename: '2024-06-01-terminal-ui-design.md',
                 date: '2024-06-01',
                 title: 'Creating Effective Terminal-Style UIs',
-                url: '/blog/post.html?post=2024-06-01-terminal-ui-design'
+                url: '/blog/post.html?post=2024-06-01-terminal-ui-design',
+                folder: null
             },
             {
                 filename: '2024-06-01-FixMaster-Plan.md',
                 date: '2024-06-01',
                 title: 'FixMaster Plan',
-                url: '/blog/post.html?post=2024-06-01-FixMaster-Plan'
+                url: '/blog/post.html?post=FixMaster/2024-06-01-FixMaster-Plan',
+                folder: 'FixMaster'
+            },
+            {
+                filename: '2024-06-02-Frontend-Low-Level-Design.md',
+                date: '2024-06-02',
+                title: 'Frontend Low Level Design',
+                url: '/blog/post.html?post=FixMaster/2024-06-02-Frontend-Low-Level-Design',
+                folder: 'FixMaster'
+            },
+            {
+                filename: '2024-06-03-High-Level-Design.md',
+                date: '2024-06-03',
+                title: 'High Level Design',
+                url: '/blog/post.html?post=FixMaster/2024-06-03-High-Level-Design',
+                folder: 'FixMaster'
+            },
+            {
+                filename: '2024-06-04-Project-Plan.md',
+                date: '2024-06-04',
+                title: 'Project Plan',
+                url: '/blog/post.html?post=FixMaster/2024-06-04-Project-Plan',
+                folder: 'FixMaster'
+            },
+            {
+                filename: '2024-06-05-Updated-High-Level-Design.md',
+                date: '2024-06-05',
+                title: 'Updated High Level Design',
+                url: '/blog/post.html?post=FixMaster/2024-06-05-Updated-High-Level-Design',
+                folder: 'FixMaster'
             },
             {
                 filename: '2024-05-15-distributed-systems-challenges.md',
                 date: '2024-05-15',
                 title: 'Challenges in Distributed Database Systems',
-                url: '/blog/post.html?post=2024-05-15-distributed-systems-challenges'
+                url: '/blog/post.html?post=2024-05-15-distributed-systems-challenges',
+                folder: null
             },
             {
                 filename: '2024-04-09-welcome-to-my-blog.md',
                 date: '2024-04-09',
                 title: 'Welcome to My Blog',
-                url: '/blog/post.html?post=2024-04-09-welcome-to-my-blog'
+                url: '/blog/post.html?post=2024-04-09-welcome-to-my-blog',
+                folder: null
             }
         ];
 
-        // Function to generate pure ASCII table
-        function generateAsciiTable(blogPosts) {
-            const tableElement = document.getElementById('ascii-table');
+        // Function to generate tree view
+        function generateTreeView(blogPosts) {
+            const treeElement = document.getElementById('ascii-table');
             
-            // Create a plain text table without HTML tags first
-            let plainTable = [];
-            
-            // Add header row
-            plainTable.push(['DATE', 'ID', 'TITLE']);
-            
-            // Add data rows
-            blogPosts.forEach((post, index) => {
-                const id = `#${String(index + 1).padStart(3, '0')}`;
-                const title = post.title;
-                plainTable.push([post.date, id, title]);
+            // Group posts by folder
+            const groupedPosts = {};
+            blogPosts.forEach(post => {
+                const folder = post.folder || 'root';
+                if (!groupedPosts[folder]) {
+                    groupedPosts[folder] = [];
+                }
+                groupedPosts[folder].push(post);
             });
             
-            // Calculate column widths based on content
-            const colWidths = [0, 0, 0];
-            plainTable.forEach(row => {
-                for (let i = 0; i < row.length; i++) {
-                    colWidths[i] = Math.max(colWidths[i], row[i].length);
-                }
+            // Sort posts within each folder by date (newest first)
+            Object.keys(groupedPosts).forEach(folder => {
+                groupedPosts[folder].sort((a, b) => new Date(b.date) - new Date(a.date));
             });
             
-            // Add some padding
-            colWidths[0] += 2; // DATE
-            colWidths[1] += 2; // ID
-            colWidths[2] += 2; // TITLE
+            // Generate the tree view
+            let treeContent = 'blog/posts/\n';
             
-            // Generate the ASCII table
-            let tableContent = '';
-            
-            // Top border
-            tableContent += '┌' + '─'.repeat(colWidths[0]) + '┬' + '─'.repeat(colWidths[1]) + '┬' + '─'.repeat(colWidths[2]) + '┐\n';
-            
-            // Header row
-            tableContent += '│' + plainTable[0][0].padEnd(colWidths[0]) + 
-                           '│' + plainTable[0][1].padEnd(colWidths[1]) + 
-                           '│' + plainTable[0][2].padEnd(colWidths[2]) + '│\n';
-            
-            // Header-data separator
-            tableContent += '├' + '─'.repeat(colWidths[0]) + '┼' + '─'.repeat(colWidths[1]) + '┼' + '─'.repeat(colWidths[2]) + '┤\n';
-            
-            // Data rows
-            for (let i = 1; i < plainTable.length; i++) {
-                const row = plainTable[i];
-                tableContent += '│' + row[0].padEnd(colWidths[0]) + 
-                               '│' + row[1].padEnd(colWidths[1]) + 
-                               '│';
-                
-                // Add the title with a link to the individual blog post page
-                const title = row[2];
-                const post = blogPosts[i-1];
-                const postUrl = post.url;
-                const titleHtml = `<a href="${postUrl}" class="post-link">${title}</a>`;
-                tableContent += titleHtml + ' '.repeat(colWidths[2] - title.length) + '│\n';
-                
-                // Add row divider if not the last row
-                if (i < plainTable.length - 1) {
-                    tableContent += '├' + '─'.repeat(colWidths[0]) + '┼' + '─'.repeat(colWidths[1]) + '┼' + '─'.repeat(colWidths[2]) + '┤\n';
-                }
+            // Add root posts
+            if (groupedPosts['root']) {
+                const rootPosts = groupedPosts['root'];
+                rootPosts.forEach((post, index) => {
+                    const isLastRootPost = index === rootPosts.length - 1 && Object.keys(groupedPosts).length === 1;
+                    const prefix = isLastRootPost ? '└── ' : '├── ';
+                    treeContent += `${prefix}<a href="${post.url}" class="post-link">${post.filename}</a>\n`;
+                });
             }
             
-            // Bottom border
-            tableContent += '└' + '─'.repeat(colWidths[0]) + '┴' + '─'.repeat(colWidths[1]) + '┴' + '─'.repeat(colWidths[2]) + '┘';
+            // Add folders and their posts
+            const folders = Object.keys(groupedPosts).filter(f => f !== 'root').sort();
             
-            tableElement.innerHTML = tableContent;
+            folders.forEach((folder, folderIndex) => {
+                const isLastFolder = folderIndex === folders.length - 1;
+                const folderPrefix = isLastFolder ? '└── ' : '├── ';
+                
+                // Add folder
+                treeContent += `${folderPrefix}${folder}/\n`;
+                
+                // Add posts in folder with proper indentation
+                const posts = groupedPosts[folder];
+                posts.forEach((post, postIndex) => {
+                    const isLastPost = postIndex === posts.length - 1;
+                    // Use the correct indentation for folder items
+                    const postPrefix = isLastPost ? '    └── ' : '    ├── ';
+                    treeContent += `${postPrefix}<a href="${post.url}" class="post-link">${post.filename}</a>\n`;
+                });
+            });
+            
+            // Set the content with proper formatting
+            treeElement.innerHTML = treeContent;
+            treeElement.classList.add('tree-view');
         }
         
         // Initialize the blog
         document.addEventListener('DOMContentLoaded', () => {
             try {
-                // Hide loading indicator, show table
+                // Hide loading indicator, show tree
                 document.getElementById('loading-indicator').style.display = 'none';
                 document.getElementById('ascii-table').style.display = 'block';
                 
-                // Generate the ASCII table
-                generateAsciiTable(blogPosts);
+                // Generate the tree view
+                generateTreeView(blogPosts);
                 
                 // Update stats
                 document.getElementById('total-posts').textContent = blogPosts.length;
